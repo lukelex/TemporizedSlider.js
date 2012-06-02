@@ -46,7 +46,7 @@ TemporizedSlider.init({
 ```
 
 ###HTML Structure
-By default, it looks for three elements to interact `#slider_image` ( an image tag ), `#slider_title` ( a div tag to hold the title content ) and a `#slider_text` ( another div tag that'll hold the text ).
+By default, it looks for three elements to interact `#slider_image` ( an image tag ), `#slider_title` ( a container to hold the title content ) and a `#slider_text` ( another container that'll hold the text ).
 
 ##Licence
 Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
