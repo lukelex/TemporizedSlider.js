@@ -10,6 +10,10 @@
 var TemporizedSlider = {};
 
 TemporizedSlider.init = function(options) {
+  args = options
+
+  if (args.beforeInit != null) args.beforeInit();
+
   var default_args = {
     'default_time' : 0,
     'data' : [{
@@ -35,6 +39,8 @@ TemporizedSlider.init = function(options) {
   end = collection.length - 1;
   timeOut = null;
   paused = false;
+
+  if (args.afterInit != null) args.afterInit();
 };
 
 TemporizedSlider.play = function() {
@@ -79,6 +85,8 @@ TemporizedSlider.changeContent = function() {
   document.getElementById('slider_title').textContent = obj.title;
   document.getElementById('slider_text').innerHtml = obj.text;
   document.getElementById('slider_text').textContent = obj.text;
+
+  if (args.afterChange != null) args.afterChange();
 };
 
 TemporizedSlider.scheduleNextChange = function() {
