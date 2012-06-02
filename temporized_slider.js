@@ -63,9 +63,7 @@ TemporizedSlider.previous = function() {
 
   TemporizedSlider.changeContent();
 
-  if(!paused){
-    TemporizedSlider.scheduleNextChange();
-  }
+  if(!paused) TemporizedSlider.scheduleNextChange();
 };
 
 TemporizedSlider.next = function() {
@@ -73,9 +71,7 @@ TemporizedSlider.next = function() {
 
   TemporizedSlider.changeContent();
 
-  if(!paused){
-    TemporizedSlider.scheduleNextChange();
-  }
+  if(!paused) TemporizedSlider.scheduleNextChange();
 };
 
 TemporizedSlider.changeContent = function() {
