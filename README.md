@@ -12,15 +12,19 @@ TemporizedSlider.init({
     image : 'https://www.google.com.br/images/srpr/logo3w.png',
     title : 'my title',
     text  : 'temporized text',
-    time  : 1
+    time  : 18
   },{
     image : 'http://railsbrasil.s3.amazonaws.com/sites/4e2c66cde8fb0e0001000004/theme/images/rails.png',
     title : 'my rails title',
     text  : 'temporized rails text',
-    time  : 1
+    time  : 15
   }]
 });
-TemporizedSlider.play();
+TemporizedSlider.pause();     // pause the slider
+TemporizedSlider.play();      // Initiate or resume the slider
+TemporizedSlider.next();      // go to next slide
+TemporizedSlider.previous();  // go to previous slide
+```
 ```
 
 Licence
