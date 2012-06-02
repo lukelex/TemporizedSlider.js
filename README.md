@@ -24,7 +24,7 @@ TemporizedSlider.next();      // go to next slide
 TemporizedSlider.previous();  // go to previous slide
 ```
 ###Using Callbacks
-Optionally, callbacks could be used to trigger custom actions, on specific moments.
+Optionally, callbacks can be used to trigger custom actions, on specific moments.
 ```javascript
 TemporizedSlider.init({
   'data' : [{
@@ -50,9 +50,9 @@ By default, it looks for three elements to interact `#slider_image` ( an image t
 
 Those elements can be overwritten throught these parameters, like so:
 ```javascript
-'image_id' : 'slider_image',
-'title_id' : 'slider_title',
-'text_id' : 'slider_text'
+'image_id' : 'my_custom_image_id',
+'title_id' : 'my_custom_title_id',
+'text_id' : 'my_custom_text_id'
 ```
 
 ##Licence
