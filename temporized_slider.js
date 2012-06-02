@@ -15,7 +15,10 @@ TemporizedSlider.init = function(options) {
   if (args.beforeInit != null) args.beforeInit();
 
   var default_args = {
-    'default_time' : 0
+    'default_time' : 0,
+    'image_id' : 'slider_image',
+    'title_id' : 'slider_title',
+    'text_id' : 'slider_text'
   };
 
   for(var index in default_args) {
@@ -31,6 +34,7 @@ TemporizedSlider.init = function(options) {
     paused = false;
 
     if (args.afterInit != null) args.afterInit();
+    TemporizedSlider.play();
   };
 };
 
@@ -67,11 +71,11 @@ TemporizedSlider.next = function() {
 
 TemporizedSlider.changeContent = function() {
   var obj = collection[pointer];
-  document.getElementById('slider_image').src = obj.image;
-  document.getElementById('slider_title').innerHtml = obj.title;
-  document.getElementById('slider_title').textContent = obj.title;
-  document.getElementById('slider_text').innerHtml = obj.text;
-  document.getElementById('slider_text').textContent = obj.text;
+  document.getElementById(args.image_id).src = obj.image;
+  document.getElementById(args.title_id).innerHtml = obj.title;
+  document.getElementById(args.title_id).textContent = obj.title;
+  document.getElementById(args.text_id).innerHtml = obj.text;
+  document.getElementById(args.text_id).textContent = obj.text;
 
   if (args.afterChange != null) args.afterChange();
 };
