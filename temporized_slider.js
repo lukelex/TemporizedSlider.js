@@ -52,6 +52,26 @@ TemporizedSlider.pause = function() {
   pointer = (pointer - 1 < 0) ? 0 : (pointer - 1);
 };
 
+TemporizedSlider.previous = function() {
+  pointer = (pointer - 1 >= 0) ? (pointer - 1) : end;
+
+  TemporizedSlider.changeContent();
+
+  if(!paused){
+    TemporizedSlider.scheduleNextChange();
+  }
+};
+
+TemporizedSlider.next = function() {
+  pointer = (pointer + 1 <= end) ? (pointer + 1) : 0;
+
+  TemporizedSlider.changeContent();
+
+  if(!paused){
+    TemporizedSlider.scheduleNextChange();
+  }
+};
+
 TemporizedSlider.changeContent = function() {
   var obj = collection[pointer];
   document.getElementById('slider_image').src = obj.image;
