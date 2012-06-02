@@ -3,7 +3,7 @@
 A micro js that implements a customizable temporized image slider, with custom text and title for each one.
 
 ##Usage
-###Basic
+###Basics
 ```javascript
 TemporizedSlider.init({
   'data' : [{
@@ -24,7 +24,7 @@ TemporizedSlider.next();      // go to next slide
 TemporizedSlider.previous();  // go to previous slide
 ```
 ###Using Callbacks
-Optionally, callbacks could be used on specific moments to trigger custom actions.
+Optionally, callbacks could be used to trigger custom actions, on specific moments.
 ```javascript
 TemporizedSlider.init({
   'data' : [{
@@ -44,6 +44,9 @@ TemporizedSlider.init({
   }
 });
 ```
+
+###HTML Structure
+By default, it looks for three elements to interact `#slider_image` ( an image tag ), `#slider_title` ( a div tag to hold the title content ) and a `#slider_text` ( another div tag that'll hold the text ).
 
 ##Licence
 Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
