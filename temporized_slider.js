@@ -15,32 +15,23 @@ TemporizedSlider.init = function(options) {
   if (args.beforeInit != null) args.beforeInit();
 
   var default_args = {
-    'default_time' : 0,
-    'data' : [{
-      image : 'https://www.google.com.br/images/srpr/logo3w.png',
-      title : 'my title',
-      text  : 'temporized text',
-      time  : 1
-    },{
-      image : 'http://railsbrasil.s3.amazonaws.com/sites/4e2c66cde8fb0e0001000004/theme/images/rails.png',
-      title : 'my rails title',
-      text  : 'temporized rails text',
-      time  : 1
-    }]
+    'default_time' : 0
   };
 
   for(var index in default_args) {
-    if(typeof options[index] === "undefined") options[index] = default_args[index];
+    if(typeof args[index] === "undefined") args[index] = default_args[index];
   }
 
-  collection = options.data;
+  if (typeof args.data !== "undefined") {
+    collection = options.data;
 
-  pointer = -1;
-  end = collection.length - 1;
-  timeOut = null;
-  paused = false;
+    pointer = -1;
+    end = collection.length - 1;
+    timeOut = null;
+    paused = false;
 
-  if (args.afterInit != null) args.afterInit();
+    if (args.afterInit != null) args.afterInit();
+  };
 };
 
 TemporizedSlider.play = function() {
