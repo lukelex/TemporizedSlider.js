@@ -84,4 +84,4 @@ TemporizedSlider.changeContent = function() {
 TemporizedSlider.scheduleNextChange = function() {
   clearTimeout(timeOut);
   timeOut = setTimeout('TemporizedSlider.play()', collection[pointer].time * 1000);
-}
+};
