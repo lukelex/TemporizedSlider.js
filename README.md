@@ -48,7 +48,7 @@ TemporizedSlider.init({
 ###HTML Structure
 By default, it looks for three elements to interact `#slider_image` ( an image tag ), `#slider_title` ( a container to hold the title content ) and a `#slider_text` ( another container that'll hold the text ).
 
-Those elements can be overwritten throught these parameters, like so:
+Those elements can be overwritten through these parameters, like so:
 ```javascript
 'image_id' : 'my_custom_image_id',
 'title_id' : 'my_custom_title_id',
