@@ -27,12 +27,7 @@ TemporizedSlider.previous();  // go to previous slide
 Optionally, callbacks can be used to trigger custom actions, on specific moments.
 ```javascript
 TemporizedSlider.init({
-  data : [{
-    image : 'https://www.google.com.br/images/srpr/logo3w.png',
-    title : 'my title',
-    text  : 'temporized text',
-    time  : 18
-  }],
+  data : ... ,
   beforeInit : function() {
     console.warn('initiating');
   },
@@ -56,9 +51,12 @@ By default, it looks for three elements to interact `#slider_image` ( an image t
 
 Those elements can be overwritten through these parameters, like so:
 ```javascript
-image_id : 'my_custom_image_id',
-title_id : 'my_custom_title_id',
-text_id : 'my_custom_text_id'
+TemporizedSlider.init({
+  data : ... ,
+  image_id : 'my_custom_image_id',
+  title_id : 'my_custom_title_id',
+  text_id : 'my_custom_text_id'
+})
 ```
 
 ##Licence
