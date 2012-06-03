@@ -10,7 +10,7 @@
 var TemporizedSlider = {};
 
 TemporizedSlider.init = function(options) {
-  args = options
+  args = options;
 
   if (args.beforeInit != null) args.beforeInit();
 
@@ -35,7 +35,7 @@ TemporizedSlider.init = function(options) {
 
     if (args.afterInit != null) args.afterInit();
     TemporizedSlider.play();
-  };
+  }
 };
 
 TemporizedSlider.play = function() {
@@ -72,10 +72,8 @@ TemporizedSlider.next = function() {
 TemporizedSlider.changeContent = function() {
   var obj = collection[pointer];
   document.getElementById(args.image_id).src = obj.image;
-  document.getElementById(args.title_id).innerHtml = obj.title;
-  document.getElementById(args.title_id).textContent = obj.title;
-  document.getElementById(args.text_id).innerHtml = obj.text;
-  document.getElementById(args.text_id).textContent = obj.text;
+  document.getElementById(args.title_id).innerHTML = obj.title;
+  document.getElementById(args.text_id).innerHTML = obj.text;
 
   if (args.afterChange != null) args.afterChange();
 };
