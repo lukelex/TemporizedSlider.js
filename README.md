@@ -45,6 +45,9 @@ TemporizedSlider.init({
   beforePlay : function() {
     console.warn('playing');
   }
+  beforePause : function() {
+    console.warn('pausing');
+  }
 });
 ```
 
