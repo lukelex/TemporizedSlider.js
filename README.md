@@ -6,7 +6,7 @@ A micro js that implements a customizable temporized image slider, with custom t
 ###Basics
 ```javascript
 TemporizedSlider.init({
-  'data' : [{
+  data : [{
     image : 'https://www.google.com.br/images/srpr/logo3w.png',
     title : 'my title',
     text  : 'temporized text',
@@ -27,22 +27,22 @@ TemporizedSlider.previous();  // go to previous slide
 Optionally, callbacks can be used to trigger custom actions, on specific moments.
 ```javascript
 TemporizedSlider.init({
-  'data' : [{
+  data : [{
     image : 'https://www.google.com.br/images/srpr/logo3w.png',
     title : 'my title',
     text  : 'temporized text',
     time  : 18
   }],
-  'beforeInit' : function() {
+  beforeInit : function() {
     console.warn('initiating');
   },
-  'afterInit' : function() {
+  afterInit : function() {
     console.warn('initiated');
   },
-  'afterChange' : function() {
+  afterChange : function() {
     console.warn('changed');
   },
-  'beforePlay' : function() {
+  beforePlay : function() {
     console.warn('playing');
   }
 });
@@ -53,9 +53,9 @@ By default, it looks for three elements to interact `#slider_image` ( an image t
 
 Those elements can be overwritten through these parameters, like so:
 ```javascript
-'image_id' : 'my_custom_image_id',
-'title_id' : 'my_custom_title_id',
-'text_id' : 'my_custom_text_id'
+image_id : 'my_custom_image_id',
+title_id : 'my_custom_title_id',
+text_id : 'my_custom_text_id'
 ```
 
 ##Licence
