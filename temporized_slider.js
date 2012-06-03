@@ -39,6 +39,7 @@ TemporizedSlider.init = function(options) {
 };
 
 TemporizedSlider.play = function() {
+  if (args.beforePlay != null) args.beforePlay();
   paused = false;
 
   pointer = (pointer + 1 > end) ? 0 : (pointer + 1);
@@ -48,6 +49,7 @@ TemporizedSlider.play = function() {
 };
 
 TemporizedSlider.pause = function() {
+  if (args.beforePause != null) args.beforePause();
   paused = true;
   clearTimeout(timeOut);
   pointer = (pointer - 1 < 0) ? 0 : (pointer - 1);

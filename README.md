@@ -41,6 +41,9 @@ TemporizedSlider.init({
   },
   'afterChange' : function() {
     console.warn('changed');
+  },
+  'beforePlay' : function() {
+    console.warn('playing');
   }
 });
 ```
