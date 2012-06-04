@@ -67,7 +67,7 @@ TemporizedSlider.init({
 Controls functionality is provided to handle its basic functions, such as `play`, `pause`, `previous` and `next`.
 
 ####Custom Elements
-By default, Controls will search for four elements to assign its default actions, using their html ids, `play_control`, `pause_control`, `previous_control` and `next_control`. It's possible to customize this references through the controls parameters, as follows:
+By default, Controls will search for four elements to assign its default actions, using their tag ids, `play_control`, `pause_control`, `previous_control` and `next_control`. It's possible to customize this references through the Controls parameters, as follows:
 
 ```javascript
 TemporizedSlider.init({
