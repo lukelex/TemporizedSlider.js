@@ -74,7 +74,7 @@ TemporizedSlider.play = function(force_play) {
 };
 
 TemporizedSlider.pause = function() {
-  if (!pause) {
+  if (!paused) {
     if (args.beforePause != null) args.beforePause();
 
     paused = true;
