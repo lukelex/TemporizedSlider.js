@@ -69,7 +69,7 @@ Controls functionality is provided to handle its basic functions, such as `play`
 ####Custom Elements
 By default, Controls will search for four elements to assign its default actions, using their html ids, `play_control`, `pause_control`, `previous_control` and `next_control`. It's possible to customize this references through the controls parameters, as follows:
 
-```
+```javascript
 TemporizedSlider.init({
   data : ... ,
   controls : {
@@ -86,7 +86,7 @@ TemporizedSlider.init({
 ####Custom Events
 It's also provided a way to customize the functions that handles Controls events. This can be achieved through the following lines:
 
-```
+```javascript
 TemporizedSlider.init({
   data : ... ,
   controls : {
