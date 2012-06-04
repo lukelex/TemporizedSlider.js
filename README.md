@@ -4,6 +4,7 @@ A micro js that implements a customizable temporized image slider, with custom t
 
 ##Usage
 ###Basics
+
 ```javascript
 TemporizedSlider.init({
   data : [{
@@ -25,6 +26,7 @@ TemporizedSlider.previous();  // go to previous slide
 ```
 ###Using Callbacks
 Optionally, callbacks can be used to trigger custom actions, on specific moments.
+
 ```javascript
 TemporizedSlider.init({
   data : ... ,
@@ -39,7 +41,7 @@ TemporizedSlider.init({
   },
   beforePlay : function() {
     console.warn('playing');
-  }
+  },
   beforePause : function() {
     console.warn('pausing');
   }
@@ -50,13 +52,60 @@ TemporizedSlider.init({
 By default, it looks for three elements to interact `#slider_image` ( an image tag ), `#slider_title` ( a container to hold the title content ) and a `#slider_text` ( another container that'll hold the text ).
 
 Those elements can be overwritten through these parameters, like so:
+
 ```javascript
 TemporizedSlider.init({
   data : ... ,
   image_id : 'my_custom_image_id',
   title_id : 'my_custom_title_id',
   text_id : 'my_custom_text_id'
-})
+});
+```
+
+
+###Slider Controls
+Controls functionality is provided to handle its basic functions, such as `play`, `pause`, `previous` and `next`.
+
+####Custom Elements
+By default, Controls will search for four elements to assign its default actions, using their html ids, `play_control`, `pause_control`, `previous_control` and `next_control`. It's possible to customize this references through the controls parameters, as follows:
+
+```
+TemporizedSlider.init({
+  data : ... ,
+  controls : {
+    ids : {
+      play : 'custom_play_id',
+      pause : 'custom_pause_id',
+      previous : 'custom_previous_id',
+      next : 'custom_next_id'
+    }
+  }
+});
+```
+
+####Custom Events
+It's also provided a way to customize the functions that handles Controls events. This can be achieved through the following lines:
+
+```
+TemporizedSlider.init({
+  data : ... ,
+  controls : {
+    functions : {
+      play : function() {
+        console.warn('play click');
+      },
+      pause : function() {
+        console.warn('pause click');
+      },
+      previous : function() {
+        console.warn('previous click');
+      },
+      next : function() {
+        console.warn('next click');
+      }
+    }
+  }
+});
 ```
 
 ##Licence
