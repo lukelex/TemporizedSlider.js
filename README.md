@@ -108,7 +108,7 @@ TemporizedSlider.init({
 });
 ```
 
-##Licence
+##License
 Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
 
 Permission is hereby granted, free of charge, to any person obtaining
