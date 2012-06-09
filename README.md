@@ -108,6 +108,11 @@ TemporizedSlider.init({
 });
 ```
 
+## Contributors
+
+  * Rodrigo Alves Vieira (http://www.rodrigoalvesvieira.com)
+
+
 ##License
 Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
 
