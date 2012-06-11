@@ -120,7 +120,7 @@ TemporizedSlider.init({
 });
 ```
 
-*Note: These functions will overwrite the defaulf behavior. If desired to return to it, you can use default behavior calls such as `TemporizedSlider.next()` and `TemporizedSlider.previous`.
+*Note: These functions will overwrite the defaulf behavior. If desired to return to it, you can use default behavior calls such as `TemporizedSlider.next()` and `TemporizedSlider.previous()`.
 
 ##License
 Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
