@@ -120,6 +120,8 @@ TemporizedSlider.init({
 });
 ```
 
+*Notice that if Controls functions are provided you must define within, if desired, the default behavior calls. Such as `TemporizedSlider.next()`, `TemporizedSlider.previous` and so on.
+
 ##License
 Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
 

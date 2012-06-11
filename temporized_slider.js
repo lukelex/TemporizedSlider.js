@@ -47,6 +47,9 @@ TemporizedSlider.init = function(options) {
   for(var index in default_args) {
     if(typeof args[index] === "undefined") args[index] = default_args[index];
   }
+  for(var index in default_args.controls) {
+    if(typeof args.controls[index] === "undefined") args.controls[index] = default_args.controls[index];
+  }
 
   if (typeof args.data !== "undefined") {
     if (args.controls.load) TemporizedSlider.defineClicks();
@@ -119,7 +122,6 @@ TemporizedSlider.scheduleNextChange = function() {
 
 TemporizedSlider.defineClicks = function() {
   var play_control = document.getElementById('play_control');
-
   play_control.onclick = function() {
     args.controls.functions.play();
   };
