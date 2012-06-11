@@ -20,6 +20,7 @@ TemporizedSlider.init = function(options) {
     title_id : 'slider_title',
     text_id : 'slider_text',
     controls : {
+      load : true,
       ids : {
         play_id : 'play_control',
         pause_id : 'pause_control',
@@ -48,7 +49,7 @@ TemporizedSlider.init = function(options) {
   }
 
   if (typeof args.data !== "undefined") {
-    TemporizedSlider.defineClicks();
+    if (args.controls.load) TemporizedSlider.defineClicks();
 
     collection = options.data;
 
@@ -65,6 +66,7 @@ TemporizedSlider.init = function(options) {
 TemporizedSlider.play = function(force_play) {
   if (paused || force_play) {
     if (args.beforePlay != null) args.beforePlay();
+
     paused = false;
     pointer = (pointer + 1 > end) ? 0 : (pointer + 1);
 
@@ -102,9 +104,11 @@ TemporizedSlider.next = function() {
 
 TemporizedSlider.changeContent = function() {
   var obj = collection[pointer];
+
   document.getElementById(args.image_id).src = obj.image;
   document.getElementById(args.title_id).innerHTML = obj.title;
   document.getElementById(args.text_id).innerHTML = obj.text;
+
   if (args.afterChange != null) args.afterChange();
 };
 
@@ -115,17 +119,21 @@ TemporizedSlider.scheduleNextChange = function() {
 
 TemporizedSlider.defineClicks = function() {
   var play_control = document.getElementById('play_control');
+
   play_control.onclick = function() {
     args.controls.functions.play();
   };
+
   var pause_control = document.getElementById('pause_control');
   pause_control.onclick = function() {
     args.controls.functions.pause();
   };
+
   var previous_control = document.getElementById('previous_control');
   previous_control.onclick = function() {
     args.controls.functions.previous();
   };
+
   var next_control = document.getElementById('next_control');
   next_control.onclick = function() {
     args.controls.functions.next();

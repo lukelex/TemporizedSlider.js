@@ -83,6 +83,18 @@ TemporizedSlider.init({
 });
 ```
 
+####Shutting of Controls
+Controls is always on, wich is modifiable through the following parameter:
+
+```javascript
+TemporizedSlider.init({
+  data : ... ,
+  controls : {
+    load : false
+  }
+});
+```
+
 ####Custom Events
 It's also provided a way to customize the functions that handles Controls events. This can be achieved through the following lines:
 
