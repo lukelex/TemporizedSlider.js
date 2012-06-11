@@ -1,6 +1,6 @@
 #TemporizedSlider.js
 
-A micro js that implements a customizable temporized image slider, with custom text and title for each one.
+A micro js that implements a temporized image slider, with custom text and title. It leaves room for others personalized changes.
 
 ##Usage
 ###Basics
@@ -25,7 +25,7 @@ TemporizedSlider.next();      // go to next slide
 TemporizedSlider.previous();  // go to previous slide
 ```
 ###Using Callbacks
-Optionally, callbacks can be used to trigger custom actions, on specific moments.
+Optionally, callbacks can be used to trigger custom actions, on pre-determined moments.
 
 ```javascript
 TemporizedSlider.init({
@@ -49,9 +49,9 @@ TemporizedSlider.init({
 ```
 
 ###HTML Structure
-By default, it looks for three elements to interact `#slider_image` ( an image tag ), `#slider_title` ( a container to hold the title content ) and a `#slider_text` ( another container that'll hold the text ).
+By default, it looks for three elements to interact `#slider_image` (an image tag), `#slider_title` (a container to hold the title) and a `#slider_text` (another container that'll hold the text).
 
-Those elements can be overwritten through these parameters, like so:
+Those elements can be overwritten through the parameters below:
 
 ```javascript
 TemporizedSlider.init({
@@ -67,7 +67,7 @@ TemporizedSlider.init({
 Controls functionality is provided to handle its basic functions, such as `play`, `pause`, `previous` and `next`.
 
 ####Custom Elements
-By default, Controls will search for four elements to assign its default actions, using their tag ids, `play_control`, `pause_control`, `previous_control` and `next_control`. It's possible to customize this references through the Controls parameters, as follows:
+By default, Controls will assign search for four elements to assign its default actions, using their tag ids, `play_control`, `pause_control`, `previous_control` and `next_control`. It's possible to customize this references through the Controls parameters, as follows:
 
 ```javascript
 TemporizedSlider.init({
