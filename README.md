@@ -49,7 +49,7 @@ TemporizedSlider.init({
 ```
 
 ###HTML Structure
-By default, it looks for three elements to interact `#slider_image` (an image tag), `#slider_title` (a container to hold the title) and a `#slider_text` (another container that'll hold the text).
+By default, it looks for three elements to interact `#slider_image` (an image tag), `#slider_title` (a container to hold the title) and a `#slider_text` (another container that will hold the text).
 
 Those elements can be overwritten through the parameters below:
 
@@ -67,7 +67,7 @@ TemporizedSlider.init({
 Controls functionality is provided to handle its basic functions, such as `play`, `pause`, `previous` and `next`.
 
 ####Custom Elements
-By default, Controls will assign search for four elements to assign its default actions, using their tag ids, `play_control`, `pause_control`, `previous_control` and `next_control`. It's possible to customize this references through the Controls parameters, as follows:
+Controls will assign its default actions by searching for four core elements that are labeled with the tag ids: `play_control`, `pause_control`, `previous_control` and `next_control`. It is possible to customize them through the Controls parameters, as follow:
 
 ```javascript
 TemporizedSlider.init({
@@ -84,7 +84,7 @@ TemporizedSlider.init({
 ```
 
 ####Shutting off Controls
-Controls is always on, wich is modifiable through the following parameter:
+Controls is always on except when modified with the following parameter:
 
 ```javascript
 TemporizedSlider.init({
@@ -120,7 +120,7 @@ TemporizedSlider.init({
 });
 ```
 
-*Notice that if Controls functions are provided you must define within, if desired, the default behavior calls. Such as `TemporizedSlider.next()`, `TemporizedSlider.previous` and so on.
+*Note: These functions will overwrite the defaulf behavior. If desired to return to it, you can use default behavior calls such as `TemporizedSlider.next()` and `TemporizedSlider.previous`.
 
 ##License
 Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
