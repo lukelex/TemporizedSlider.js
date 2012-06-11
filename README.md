@@ -83,7 +83,7 @@ TemporizedSlider.init({
 });
 ```
 
-####Shutting of Controls
+####Shutting off Controls
 Controls is always on, wich is modifiable through the following parameter:
 
 ```javascript
