@@ -12,7 +12,7 @@ TemporizedSlider.init({
     title : 'my title',
     text  : 'temporized text',
     time  : 18
-  },{
+    },{
     image : 'http://railsbrasil.s3.amazonaws.com/sites/4e2c66cde8fb0e0001000004/theme/images/rails.png',
     title : 'my rails title',
     text  : 'temporized rails text',
@@ -24,6 +24,7 @@ TemporizedSlider.play();      // Initiate or resume the slider
 TemporizedSlider.next();      // go to next slide
 TemporizedSlider.previous();  // go to previous slide
 ```
+
 ###Using Callbacks
 Optionally, callbacks can be used to trigger custom actions, on pre-determined moments.
 
@@ -61,7 +62,6 @@ TemporizedSlider.init({
   text_id : 'my_custom_text_id'
 });
 ```
-
 
 ###Slider Controls
 Controls functionality is provided to handle its basic functions, such as `play`, `pause`, `previous` and `next`.
@@ -121,6 +121,11 @@ TemporizedSlider.init({
 ```
 
 *Note: These functions will overwrite the defaulf behavior. If desired to return to it, you can use default behavior calls such as `TemporizedSlider.next()` and `TemporizedSlider.previous()`.
+
+##How to contribute
+Please ensure that you provide appropriate test coverage and ensure the documentation is up-to-date. It's encouraged that you perform your changes in a clean topic branch rather than master, and create a pull request for your changes to be discussed and reviewed.
+
+Please also keep your commits atomic so that they are more likely to apply cleanly. That means that each commit should contain the smallest possible logical change.
 
 ##License
 Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
