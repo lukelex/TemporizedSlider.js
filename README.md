@@ -122,6 +122,13 @@ TemporizedSlider.init({
 
 *Note: These functions will overwrite the defaulf behavior. If desired to return to it, you can use default behavior calls such as `TemporizedSlider.next()` and `TemporizedSlider.previous()`.
 
+##TO DO
+
+* Allow integration with transition components;
+* Add visual timer;
+* Add slider indicator.
+
+
 ##How to contribute
 Please ensure that you provide appropriate test coverage and ensure the documentation is up-to-date. It is encouraged that you perform changes in a clean topic branch rather than a master and that you create a pull request for them. This will facilitate discussion and revision.
 
