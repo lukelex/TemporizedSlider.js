@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640" />
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Temporizedslider.js by lukasalexandre</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/lukasalexandre/TemporizedSlider.js">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Temporizedslider.js</h1>
+            <h2>A micro js that implements a customizable temporized image slider with custom texts.</h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/lukasalexandre/TemporizedSlider.js/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/lukasalexandre/TemporizedSlider.js/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <h1>TemporizedSlider.js</h1>
+
+<p>A micro js that implements a temporized image slider, with custom text and title. It leaves room for others personalized changes.</p>
+
+<h2>Usage</h2>
+
+<h3>Basics</h3>
+
+<div class="highlight">
+<pre><span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">data</span> <span class="o">:</span> <span class="p">[{</span>
+    <span class="nx">image</span> <span class="o">:</span> <span class="s1">'https://www.google.com.br/images/srpr/logo3w.png'</span><span class="p">,</span>
+    <span class="nx">title</span> <span class="o">:</span> <span class="s1">'my title'</span><span class="p">,</span>
+    <span class="nx">text</span>  <span class="o">:</span> <span class="s1">'temporized text'</span><span class="p">,</span>
+    <span class="nx">time</span>  <span class="o">:</span> <span class="mi">18</span>
+    <span class="p">},{</span>
+    <span class="nx">image</span> <span class="o">:</span> <span class="s1">'http://railsbrasil.s3.amazonaws.com/sites/4e2c66cde8fb0e0001000004/theme/images/rails.png'</span><span class="p">,</span>
+    <span class="nx">title</span> <span class="o">:</span> <span class="s1">'my rails title'</span><span class="p">,</span>
+    <span class="nx">text</span>  <span class="o">:</span> <span class="s1">'temporized rails text'</span><span class="p">,</span>
+    <span class="nx">time</span>  <span class="o">:</span> <span class="mi">15</span>
+  <span class="p">}]</span>
+<span class="p">});</span>
+<span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">pause</span><span class="p">();</span>     <span class="c1">// pause the slider</span>
+<span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>      <span class="c1">// Initiate or resume the slider</span>
+<span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span>      <span class="c1">// go to next slide</span>
+<span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">previous</span><span class="p">();</span>  <span class="c1">// go to previous slide</span>
+</pre>
+</div>
+
+
+<h3>Using Callbacks</h3>
+
+<p>Optionally, callbacks can be used to trigger custom actions, on pre-determined moments.</p>
+
+<div class="highlight">
+<pre><span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">data</span> <span class="o">:</span> <span class="p">...</span> <span class="p">,</span>
+  <span class="nx">beforeInit</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'initiating'</span><span class="p">);</span>
+  <span class="p">},</span>
+  <span class="nx">afterInit</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'initiated'</span><span class="p">);</span>
+  <span class="p">},</span>
+  <span class="nx">afterChange</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'changed'</span><span class="p">);</span>
+  <span class="p">},</span>
+  <span class="nx">beforePlay</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'playing'</span><span class="p">);</span>
+  <span class="p">},</span>
+  <span class="nx">beforePause</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'pausing'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre>
+</div>
+
+
+<h3>HTML Structure</h3>
+
+<p>By default, it looks for three elements to interact <code>#slider_image</code> (an image tag), <code>#slider_title</code> (a container to hold the title) and a <code>#slider_text</code> (another container that will hold the text).</p>
+
+<p>Those elements can be overwritten through the parameters below:</p>
+
+<div class="highlight">
+<pre><span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">data</span> <span class="o">:</span> <span class="p">...</span> <span class="p">,</span>
+  <span class="nx">image_id</span> <span class="o">:</span> <span class="s1">'my_custom_image_id'</span><span class="p">,</span>
+  <span class="nx">title_id</span> <span class="o">:</span> <span class="s1">'my_custom_title_id'</span><span class="p">,</span>
+  <span class="nx">text_id</span> <span class="o">:</span> <span class="s1">'my_custom_text_id'</span>
+<span class="p">});</span>
+</pre>
+</div>
+
+
+<h3>Slider Controls</h3>
+
+<p>Controls functionality is provided to handle its basic functions, such as <code>play</code>, <code>pause</code>, <code>previous</code> and <code>next</code>.</p>
+
+<h4>Custom Elements</h4>
+
+<p>Controls will assign its default actions by searching for four core elements that are labeled with the tag ids: <code>play_control</code>, <code>pause_control</code>, <code>previous_control</code> and <code>next_control</code>. It is possible to customize them through the Controls parameters, as follow:</p>
+
+<div class="highlight">
+<pre><span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">data</span> <span class="o">:</span> <span class="p">...</span> <span class="p">,</span>
+  <span class="nx">controls</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="nx">ids</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="nx">play</span> <span class="o">:</span> <span class="s1">'custom_play_id'</span><span class="p">,</span>
+      <span class="nx">pause</span> <span class="o">:</span> <span class="s1">'custom_pause_id'</span><span class="p">,</span>
+      <span class="nx">previous</span> <span class="o">:</span> <span class="s1">'custom_previous_id'</span><span class="p">,</span>
+      <span class="nx">next</span> <span class="o">:</span> <span class="s1">'custom_next_id'</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre>
+</div>
+
+
+<h4>Custom Events</h4>
+
+<p>It's also provided a way to customize the functions that handles Controls events. This can be achieved through the following lines:</p>
+
+<div class="highlight">
+<pre><span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">data</span> <span class="o">:</span> <span class="p">...</span> <span class="p">,</span>
+  <span class="nx">controls</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="nx">functions</span> <span class="o">:</span> <span class="p">{</span>
+      <span class="nx">play</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'play click'</span><span class="p">);</span>
+      <span class="p">},</span>
+      <span class="nx">pause</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'pause click'</span><span class="p">);</span>
+      <span class="p">},</span>
+      <span class="nx">previous</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'previous click'</span><span class="p">);</span>
+      <span class="p">},</span>
+      <span class="nx">next</span> <span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">'next click'</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre>
+</div>
+
+
+<h4>Shutting off Controls</h4>
+
+<p>Controls is always on except when modified with the following parameter:</p>
+
+<div class="highlight">
+<pre><span class="nx">TemporizedSlider</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+  <span class="nx">data</span> <span class="o">:</span> <span class="p">...</span> <span class="p">,</span>
+  <span class="nx">controls</span> <span class="o">:</span> <span class="p">{</span>
+    <span class="nx">load</span> <span class="o">:</span> <span class="kc">false</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</pre>
+</div>
+
+
+<p>*Note: These functions will overwrite the defaulf behavior. If desired to return to it, you can use default behavior calls such as <code>TemporizedSlider.next()</code> and <code>TemporizedSlider.previous()</code>.</p>
+
+<h2>How to contribute</h2>
+
+<p>Please ensure that you provide appropriate test coverage and ensure the documentation is up-to-date. It is encouraged that you perform changes in a clean topic branch rather than a master and that you create a pull request for them. This will facilitate discussion and revision.</p>
+
+<p>Please be clean, keep your commits atomic and with the smallest possible logical change. This will increase the likelihood of your submission to be used.</p>
+
+<h2>License</h2>
+
+<p>Copyright (c) 2012 Lukas Alexandre. <a href="http://www.devinscene.com.br/">http://www.devinscene.com.br/</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to use, copy and modify copies of the Software, subject
+to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/lukasalexandre">lukasalexandre</a> can be found on <a href="https://github.com/lukasalexandre/TemporizedSlider.js">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+    
+  </body>
+</html>
