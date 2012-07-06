@@ -127,6 +127,12 @@ Please ensure that you provide appropriate test coverage and ensure the document
 
 Please be clean, keep your commits atomic and with the smallest possible logical change. This will increase the likelihood of your submission to be used.
 
+###Bug reports
+
+If you discover any bugs, feel free to create an issue on GitHub. Please add as much information as possible to help us fixing the possible bug.
+
+https://github.com/lukasalexandre/TemporizedSlider.js/issues
+
 ##License
 Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
 
