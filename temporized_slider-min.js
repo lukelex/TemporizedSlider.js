@@ -1,5 +1,5 @@
 /**
- * TemporizedSlider.js
+ * TemporizedSlider.js v1.1
  *
  * Copyright 2012, Lukas Alexandre
  * Licensed under MIT
