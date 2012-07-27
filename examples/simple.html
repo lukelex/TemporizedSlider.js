@@ -18,6 +18,23 @@
         margin-top: -150px;
         margin-left: -300px;
       }
+      div#slider_gallery {
+        width:100%;
+      }
+      div#slider_gallery .gallery_img {
+        width:50px;
+        height:inherit;
+        float:left;
+      }
+      div#slider_gallery .gallery_img img {
+        width:inherit;
+        height:inherit;
+      }
+      div#slider_gallery {
+        position:absolute;
+        height:50px;
+        bottom:-50px;
+      }
     </style>
   </head>
 <body>
@@ -27,11 +44,12 @@
     </div>
     <div id="slider_title"></div>
     <div id="slider_text"></div>
+    <div id="slider_gallery"></div>
   </div>
 
   <script type="text/javascript">
     TemporizedSlider.init({
-      'data' : [{
+      data : [{
         image : 'https://www.google.com.br/images/srpr/logo3w.png',
         title : 'my title',
         text  : 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',

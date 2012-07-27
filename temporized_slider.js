@@ -41,6 +41,10 @@ TemporizedSlider.init = function(options) {
           TemporizedSlider.next();
         }
       }
+    },
+    gallery : {
+      load : true,
+      id : "slider_gallery"
     }
   };
 
@@ -53,6 +57,7 @@ TemporizedSlider.init = function(options) {
 
   if (typeof args.data !== "undefined") {
     if (args.controls.load) TemporizedSlider.defineClicks();
+    if (args.gallery.load) TemporizedSlider.loadGallery();
 
     collection = options.data;
 
@@ -140,4 +145,14 @@ TemporizedSlider.defineClicks = function() {
   next_control.onclick = function() {
     args.controls.functions.next();
   };
+};
+
+TemporizedSlider.loadGallery = function() {
+  var galleryBar = document.getElementById(args.gallery.id);
+  var imgUrl, title, container;
+  for(var i in args.data) {
+    imgUrl = args.data[i].image
+    imgTitle = args.data[i].title
+    galleryBar.innerHTML += '<div class="gallery_img"><img src="' + imgUrl + '" alt="' + imgTitle + '"/></div>';
+  }
 };
