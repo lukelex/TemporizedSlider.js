@@ -22,10 +22,10 @@ TemporizedSlider.init = function(options) {
     controls : {
       load : true,
       ids : {
-        play_id : 'play_control',
-        pause_id : 'pause_control',
-        previous_id : 'previous_control',
-        next_id : 'next_control'
+        play : 'play_control',
+        pause : 'pause_control',
+        previous : 'previous_control',
+        next : 'next_control'
       },
       functions : {
         play : function() {
@@ -121,22 +121,22 @@ TemporizedSlider.scheduleNextChange = function() {
 };
 
 TemporizedSlider.defineClicks = function() {
-  var play_control = document.getElementById('play_control');
+  var play_control = document.getElementById(args.controls.ids.play);
   play_control.onclick = function() {
     args.controls.functions.play();
   };
 
-  var pause_control = document.getElementById('pause_control');
+  var pause_control = document.getElementById(args.controls.ids.pause);
   pause_control.onclick = function() {
     args.controls.functions.pause();
   };
 
-  var previous_control = document.getElementById('previous_control');
+  var previous_control = document.getElementById(args.controls.ids.previous);
   previous_control.onclick = function() {
     args.controls.functions.previous();
   };
 
-  var next_control = document.getElementById('next_control');
+  var next_control = document.getElementById(args.controls.ids.next);
   next_control.onclick = function() {
     args.controls.functions.next();
   };
