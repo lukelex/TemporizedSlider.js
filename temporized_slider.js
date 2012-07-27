@@ -1,5 +1,5 @@
 /**
- * TemporizedSlider.js v1.1
+ * TemporizedSlider.js v2.0
  *
  * Copyright 2012, Lukas Alexandre
  * Licensed under MIT
@@ -151,8 +151,8 @@ TemporizedSlider.loadGallery = function() {
   var galleryBar = document.getElementById(args.gallery.id);
   var imgUrl, title, container;
   for(var i in args.data) {
-    imgUrl = args.data[i].image
-    imgTitle = args.data[i].title
+    imgUrl = args.data[i].image;
+    imgTitle = args.data[i].title;
     galleryBar.innerHTML += '<div class="gallery_img"><img src="' + imgUrl + '" alt="' + imgTitle + '"/></div>';
   }
 };
