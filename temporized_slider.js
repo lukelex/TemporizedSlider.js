@@ -179,7 +179,7 @@ TemporizedSlider.loadGallery = function() {
     var imgs = document.getElementsByClassName('gallery_img');
     for(var i in imgs) {
       if (typeof imgs[i] === "object") {
-        imgs[i].className = imgs[i].className.replace('current', '');
+        imgs[i].className = imgs[i].className.replace(' current', '');
       }
     }
     if (typeof elem === 'number') elem = imgs[elem];
