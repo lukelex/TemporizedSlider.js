@@ -119,6 +119,8 @@ TemporizedSlider.changeContent = function(index) {
   document.getElementById(args.title_id).innerHTML = obj.title;
   document.getElementById(args.text_id).innerHTML = obj.text;
 
+  if (args.gallery.load) TemporizedSlider.markGaleeryItemAsCurrent(pointer);
+
   if (args.afterChange != null) args.afterChange();
 };
 
@@ -169,6 +171,18 @@ TemporizedSlider.loadGallery = function() {
     galleryImgItem.onclick = function(e) {
       TemporizedSlider.changeContent(e.currentTarget.dataset.index);
       if(!paused) TemporizedSlider.scheduleNextChange();
+      TemporizedSlider.markGaleeryItemAsCurrent(e.currentTarget);
     }
-  }
+  };
+
+  TemporizedSlider.markGaleeryItemAsCurrent = function(elem) {
+    var imgs = document.getElementsByClassName('gallery_img');
+    for(var i in imgs) {
+      if (typeof imgs[i] === "object") {
+        imgs[i].className = imgs[i].className.replace('current', '');
+      }
+    }
+    if (typeof elem === 'number') elem = imgs[elem];
+    elem.className += ' current';
+  };
 };
