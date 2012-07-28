@@ -110,7 +110,9 @@ TemporizedSlider.next = function() {
   if(!paused) TemporizedSlider.scheduleNextChange();
 };
 
-TemporizedSlider.changeContent = function() {
+TemporizedSlider.changeContent = function(index) {
+  if (index) pointer = index;
+
   var obj = collection[pointer];
 
   document.getElementById(args.image_id).src = obj.image;
@@ -157,10 +159,16 @@ TemporizedSlider.defineClicks = function() {
 
 TemporizedSlider.loadGallery = function() {
   var gallery = document.getElementById(args.gallery.id);
-  var imgUrl, title, container;
+  var imgUrl, title, container, galleryImgItem;
   for(var i in args.data) {
     imgUrl = args.data[i].image;
     imgTitle = args.data[i].title;
-    gallery.innerHTML += '<div class="gallery_img"><img src="' + imgUrl + '" alt="' + imgTitle + '"/></div>';
+    gallery.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '"/></div>';
+    galleryImgs = document.getElementsByClassName("gallery_img");
+    galleryImgItem = galleryImgs[galleryImgs.length-1];
+    galleryImgItem.onclick = function(e) {
+      TemporizedSlider.changeContent(e.currentTarget.dataset.index);
+      if(!paused) TemporizedSlider.scheduleNextChange();
+    }
   }
 };

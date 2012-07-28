@@ -122,6 +122,13 @@ TemporizedSlider.init({
 
 *Note: These functions will overwrite the defaulf behavior. If desired to return to it, you can use default behavior calls such as `TemporizedSlider.next()` and `TemporizedSlider.previous()`.
 
+###Slider Gallery
+Gallery will show the images passed on data parameters. This can also be used to control the slides.
+
+```javascript
+
+```
+
 ##TO DO
 
 * Allow integration with transition components;
