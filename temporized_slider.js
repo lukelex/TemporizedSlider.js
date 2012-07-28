@@ -127,32 +127,40 @@ TemporizedSlider.scheduleNextChange = function() {
 
 TemporizedSlider.defineClicks = function() {
   var play_control = document.getElementById(args.controls.ids.play);
-  play_control.onclick = function() {
-    args.controls.functions.play();
-  };
+  if (play_control) {
+    play_control.onclick = function() {
+      args.controls.functions.play();
+    };
+  }
 
   var pause_control = document.getElementById(args.controls.ids.pause);
-  pause_control.onclick = function() {
-    args.controls.functions.pause();
-  };
+  if (pause_control) {
+    pause_control.onclick = function() {
+      args.controls.functions.pause();
+    };
+  }
 
   var previous_control = document.getElementById(args.controls.ids.previous);
-  previous_control.onclick = function() {
-    args.controls.functions.previous();
-  };
+  if (previous_control) {
+    previous_control.onclick = function() {
+      args.controls.functions.previous();
+    };
+  }
 
   var next_control = document.getElementById(args.controls.ids.next);
-  next_control.onclick = function() {
-    args.controls.functions.next();
-  };
+  if (next_control) {
+    next_control.onclick = function() {
+      args.controls.functions.next();
+    };
+  }
 };
 
 TemporizedSlider.loadGallery = function() {
-  var galleryBar = document.getElementById(args.gallery.id);
+  var gallery = document.getElementById(args.gallery.id);
   var imgUrl, title, container;
   for(var i in args.data) {
     imgUrl = args.data[i].image;
     imgTitle = args.data[i].title;
-    galleryBar.innerHTML += '<div class="gallery_img"><img src="' + imgUrl + '" alt="' + imgTitle + '"/></div>';
+    gallery.innerHTML += '<div class="gallery_img"><img src="' + imgUrl + '" alt="' + imgTitle + '"/></div>';
   }
 };
