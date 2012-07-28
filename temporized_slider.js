@@ -165,24 +165,25 @@ TemporizedSlider.loadGallery = function() {
   for(var i in args.data) {
     imgUrl = args.data[i].image;
     imgTitle = args.data[i].title;
-    gallery.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '"/></div>';
+    gallery.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '" onclick="TemporizedSlider.GalleryItemClick(this)"/></div>';
     galleryImgs = document.getElementsByClassName("gallery_img");
     galleryImgItem = galleryImgs[galleryImgs.length-1];
-    galleryImgItem.onclick = function(e) {
-      TemporizedSlider.changeContent(e.currentTarget.dataset.index);
-      if(!paused) TemporizedSlider.scheduleNextChange();
-      TemporizedSlider.markGaleeryItemAsCurrent(e.currentTarget);
-    }
   };
+};
 
-  TemporizedSlider.markGaleeryItemAsCurrent = function(elem) {
-    var imgs = document.getElementsByClassName('gallery_img');
-    for(var i in imgs) {
-      if (typeof imgs[i] === "object") {
-        imgs[i].className = imgs[i].className.replace(' current', '');
-      }
+TemporizedSlider.GalleryItemClick = function(e) {
+  TemporizedSlider.changeContent(e.dataset.index);
+  if(!paused) TemporizedSlider.scheduleNextChange();
+  TemporizedSlider.markGaleeryItemAsCurrent(e);
+}
+
+TemporizedSlider.markGaleeryItemAsCurrent = function(elem) {
+  var imgs = document.getElementsByClassName('gallery_img');
+  for(var i in imgs) {
+    if (typeof imgs[i] === "object") {
+      imgs[i].className = imgs[i].className.replace(' current', '');
     }
-    if (typeof elem === 'number') elem = imgs[elem];
-    elem.className += ' current';
-  };
+  }
+  if (typeof elem === 'number') elem = imgs[elem];
+  elem.className += ' current';
 };
