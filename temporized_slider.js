@@ -119,7 +119,7 @@ TemporizedSlider.changeContent = function(index) {
   document.getElementById(args.title_id).innerHTML = obj.title;
   document.getElementById(args.text_id).innerHTML = obj.text;
 
-  if (args.gallery.load) TemporizedSlider.markGaleeryItemAsCurrent(pointer);
+  if (args.gallery.load) TemporizedSlider.markGalleryItemAsCurrent(pointer);
 
   if (args.afterChange != null) args.afterChange();
 };
@@ -174,10 +174,10 @@ TemporizedSlider.loadGallery = function() {
 TemporizedSlider.GalleryItemClick = function(e) {
   TemporizedSlider.changeContent(e.dataset.index);
   if(!paused) TemporizedSlider.scheduleNextChange();
-  TemporizedSlider.markGaleeryItemAsCurrent(e);
+  TemporizedSlider.markGalleryItemAsCurrent(e);
 }
 
-TemporizedSlider.markGaleeryItemAsCurrent = function(elem) {
+TemporizedSlider.markGalleryItemAsCurrent = function(elem) {
   var imgs = document.getElementsByClassName('gallery_img');
   for(var i in imgs) {
     if (typeof imgs[i] === "object") {
