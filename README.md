@@ -123,10 +123,16 @@ TemporizedSlider.init({
 *Note: These functions will overwrite the defaulf behavior. If desired to return to it, you can use default behavior calls such as `TemporizedSlider.next()` and `TemporizedSlider.previous()`.
 
 ###Slider Gallery
-Gallery will show the images passed on data parameters. This can also be used to control the slides.
+Gallery will show the images passed on data parameters. Although it is not active by default you can activate it using the `load : true` option and optionally passing the id of the container in wich the images should be held:
 
 ```javascript
-
+TemporizedSlider.init({
+  data : ... ,
+  gallery : {
+    load : true,
+    id : "slider_gallery"
+  }
+});
 ```
 
 ##TO DO
