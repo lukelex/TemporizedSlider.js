@@ -135,6 +135,9 @@ TemporizedSlider.init({
 });
 ```
 
+####Gallery Controls
+The slider can also be, partially, controled through the gallery. It's images can be clicked to set the current slide. Even though you are changing the current slide the Slider status will not change. If it is paused it will remain that way. If it is playing the Slider will go on from where you clicked.
+
 ##TO DO
 
 * Allow integration with transition components;
