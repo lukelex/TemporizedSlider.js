@@ -48,12 +48,13 @@ TemporizedSlider.init = function(options) {
     }
   };
 
-  for(var index in default_args) {
-    if(typeof args[index] === "undefined") args[index] = default_args[index];
-  }
-  for(var index in default_args.controls) {
-    if(typeof args.controls[index] === "undefined") args.controls[index] = default_args.controls[index];
-  }
+  args = TemporizedSlider.mergeArgs(
+    args, default_args
+  );
+
+  args.controls = TemporizedSlider.mergeArgs(
+    args.controls, default_args.controls
+  );
 
   if (typeof args.data !== "undefined") {
     if (args.controls.load) TemporizedSlider.defineClicks();
@@ -70,6 +71,15 @@ TemporizedSlider.init = function(options) {
     TemporizedSlider.play(true);
   }
 };
+
+TemporizedSlider.mergeArgs = function (args, default_args) {
+  for(var index in default_args) {
+    if(typeof args[index] === "undefined")
+      args[index] = default_args[index];
+  }
+
+  return args;
+}
 
 TemporizedSlider.play = function(force_play) {
   if (paused || force_play) {

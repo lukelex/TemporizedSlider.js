@@ -1,0 +1,4 @@
+*.DS_Store
+.floo
+.flooignore
+.sublime-project
