@@ -30,7 +30,7 @@
   </div>
 
   <script type="text/javascript">
-    TemporizedSlider.init({
+    TemporizedSlider.setup({
       'data' : [{
         image : 'https://www.google.com.br/images/srpr/logo3w.png',
         title : 'my title',
@@ -42,10 +42,10 @@
         text  : 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         time  : 3
       }],
-      beforeInit : function() {
+      beforeSetup : function() {
         console.warn('initiating');
       },
-      afterInit : function() {
+      afterSetup : function() {
         console.warn('initiated');
       },
       afterChange : function() {

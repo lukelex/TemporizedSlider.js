@@ -9,66 +9,71 @@
 
 var TemporizedSlider = {};
 
-TemporizedSlider.init = function(options) {
+TemporizedSlider.setup = function(options) {
+  TemporizedSlider.validateOptions(options);
+
   args = options;
 
-  if (args.beforeInit != null) args.beforeInit();
-
-  var default_args = {
-    default_time : 0,
-    image_id : 'slider_image',
-    title_id : 'slider_title',
-    text_id : 'slider_text',
-    controls : {
-      load : true,
-      ids : {
-        play : 'play_control',
-        pause : 'pause_control',
-        previous : 'previous_control',
-        next : 'next_control'
-      },
-      functions : {
-        play : function() {
-          TemporizedSlider.play();
-        },
-        pause : function() {
-          TemporizedSlider.pause();
-        },
-        previous : function() {
-          TemporizedSlider.previous();
-        },
-        next : function() {
-          TemporizedSlider.next();
-        }
-      }
-    },
-    gallery : {
-      load : true,
-      id : "slider_gallery"
-    }
-  };
+  if (args.beforeSetup != null) args.beforeSetup();
 
   args = TemporizedSlider.mergeArgs(
-    args, default_args
+    args, TemporizedSlider.defaultArgs
   );
 
   args.controls = TemporizedSlider.mergeArgs(
-    args.controls, default_args.controls
+    args.controls, TemporizedSlider.defaultArgs.controls
   );
 
-  if (typeof args.data !== "undefined") {
-    if (args.controls.load) TemporizedSlider.defineClicks();
-    if (args.gallery.load) TemporizedSlider.loadGallery();
+  if (args.controls.load) TemporizedSlider.loadControls();
+  if (args.gallery.load) TemporizedSlider.loadGallery();
 
-    collection = options.data;
+  collection = options.data;
 
-    pointer = -1;
-    end = collection.length - 1;
-    timeOut = null;
-    paused = false;
+  pointer = -1;
+  end = collection.length - 1;
+  timeOut = null;
+  paused = false;
 
-    if (args.afterInit != null) args.afterInit();
-    TemporizedSlider.play(true);
+  if (args.afterSetup != null) args.afterSetup();
+};
+
+TemporizedSlider.validateOptions = function (options) {
+  if (!options) throw new Error('No options provided');
+  if (!options.data)
+    throw new Error('No data provided');
+}
+
+TemporizedSlider.defaultArgs = {
+  default_time : 0,
+  image_id : 'slider_image',
+  title_id : 'slider_title',
+  text_id : 'slider_text',
+  controls : {
+    load : true,
+    ids : {
+      play : 'play_control',
+      pause : 'pause_control',
+      previous : 'previous_control',
+      next : 'next_control'
+    },
+    functions : {
+      play : function() {
+        TemporizedSlider.play();
+      },
+      pause : function() {
+        TemporizedSlider.pause();
+      },
+      previous : function() {
+        TemporizedSlider.previous();
+      },
+      next : function() {
+        TemporizedSlider.next();
+      }
+    }
+  },
+  gallery : {
+    load : true,
+    id : "slider_gallery"
   }
 };
 
@@ -107,7 +112,9 @@ TemporizedSlider.pause = function() {
 TemporizedSlider.previous = function() {
   pointer = (pointer - 1 >= 0) ? (pointer - 1) : end;
 
-  TemporizedSlider.changeContent();
+  var obj = collection[pointer];
+
+  TemporizedSlider.changeContent(obj);
 
   if(!paused) TemporizedSlider.scheduleNextChange();
 };
@@ -120,14 +127,12 @@ TemporizedSlider.next = function() {
   if(!paused) TemporizedSlider.scheduleNextChange();
 };
 
-TemporizedSlider.changeContent = function(index) {
-  if (index) pointer = index;
+TemporizedSlider.changeContent = function(obj, DOMHandler) {
+  if (!DOMHandler) DOMHandler = document;
 
-  var obj = collection[pointer];
-
-  document.getElementById(args.image_id).src = obj.image;
-  document.getElementById(args.title_id).innerHTML = obj.title;
-  document.getElementById(args.text_id).innerHTML = obj.text;
+  DOMHandler.getElementById(args.image_id).src = obj.image;
+  DOMHandler.getElementById(args.title_id).innerHTML = obj.title;
+  DOMHandler.getElementById(args.text_id).innerHTML = obj.text;
 
   if (args.gallery.load) TemporizedSlider.markGalleryItemAsCurrent(pointer);
 
@@ -139,7 +144,7 @@ TemporizedSlider.scheduleNextChange = function() {
   timeOut = setTimeout('TemporizedSlider.play(true)', collection[pointer].time * 1000);
 };
 
-TemporizedSlider.defineClicks = function() {
+TemporizedSlider.loadControls = function() {
   var play_control = document.getElementById(args.controls.ids.play);
   if (play_control) {
     play_control.onclick = function() {

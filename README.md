@@ -6,7 +6,7 @@ A micro js that implements a temporized image slider, with custom text and title
 ###Basics
 
 ```javascript
-TemporizedSlider.init({
+TemporizedSlider.setup({
   data : [{
     image : 'https://www.google.com.br/images/srpr/logo3w.png',
     title : 'my title',
@@ -29,12 +29,12 @@ TemporizedSlider.previous();  // go to previous slide
 Optionally, callbacks can be used to trigger custom actions, on pre-determined moments.
 
 ```javascript
-TemporizedSlider.init({
+TemporizedSlider.setup({
   data : ... ,
-  beforeInit : function() {
+  beforeSetup : function() {
     console.warn('initiating');
   },
-  afterInit : function() {
+  afterSetup : function() {
     console.warn('initiated');
   },
   afterChange : function() {
@@ -55,7 +55,7 @@ By default, it looks for three elements to interact `#slider_image` (an image ta
 Those elements can be overwritten through the parameters below:
 
 ```javascript
-TemporizedSlider.init({
+TemporizedSlider.setup({
   data : ... ,
   image_id : 'my_custom_image_id',
   title_id : 'my_custom_title_id',
@@ -70,7 +70,7 @@ Controls functionality is provided to handle its basic functions, such as `play`
 Controls will assign its default actions by searching for four core elements that are labeled with the tag ids: `play_control`, `pause_control`, `previous_control` and `next_control`. It is possible to customize them through the Controls parameters, as follow:
 
 ```javascript
-TemporizedSlider.init({
+TemporizedSlider.setup({
   data : ... ,
   controls : {
     ids : {
@@ -87,7 +87,7 @@ TemporizedSlider.init({
 It's also provided a way to customize the functions that handles Controls events. This can be achieved through the following lines:
 
 ```javascript
-TemporizedSlider.init({
+TemporizedSlider.setup({
   data : ... ,
   controls : {
     functions : {
@@ -112,7 +112,7 @@ TemporizedSlider.init({
 Controls is always on except when modified with the following parameter:
 
 ```javascript
-TemporizedSlider.init({
+TemporizedSlider.setup({
   data : ... ,
   controls : {
     load : false
@@ -126,7 +126,7 @@ TemporizedSlider.init({
 Gallery will show the images passed on data parameters. Although it is not active by default you can activate it using the `load : true` option and optionally passing the id of the container in wich the images should be held:
 
 ```javascript
-TemporizedSlider.init({
+TemporizedSlider.setup({
   data : ... ,
   gallery : {
     load : true,
