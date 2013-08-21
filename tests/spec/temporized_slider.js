@@ -104,7 +104,7 @@ describe('TemporizedSlider', function () {
     });
 
     it('should call play method', function () {
-      expect(script.play).toHaveBeenCalled()
+      expect(script.play).toHaveBeenCalledWith(true)
     });
   })
 

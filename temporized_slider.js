@@ -41,7 +41,7 @@ var TemporizedSlider = {};
   };
 
   TemporizedSlider.setupAndStart = function (options) {
-    TemporizedSlider.setup(options).play();
+    TemporizedSlider.setup(options).play(true);
   }
 
   TemporizedSlider.validateOptions = function (options) {
