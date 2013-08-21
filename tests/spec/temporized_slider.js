@@ -26,10 +26,10 @@ describe('TemporizedSlider', function () {
 
   beforeEach(function () {
     script = TemporizedSlider;
-  })
+  });
 
   describe('.setup', function () {
-    it('should call trigger the beforeSetup callback', function () {
+    it('should trigger the beforeSetup callback', function () {
       var options = jasmine.createSpyObj(
         'options', ['beforeSetup']
       )
@@ -57,19 +57,19 @@ describe('TemporizedSlider', function () {
       script.setup(options);
 
       expect(script.loadControls).toHaveBeenCalled();
-    })
+    });
 
     it('should throw an exception if no options is provided', function () {
       expect(function () {
-        script.setup()
+        script.setup();
       }).toThrow();
-    })
+    });
 
     it('should throw an exception if no data is provided', function () {
       expect(function () {
-        script.setup({})
+        script.setup({});
       }).toThrow();
-    })
+    });
 
     // it('should call trigger the afterSetup callback', function () {
     //   options = {
@@ -94,19 +94,19 @@ describe('TemporizedSlider', function () {
   describe('.setupAndStart', function () {
     beforeEach(function () {
       spyOn(script, 'setup').andReturn(script);
-      spyOn(script, 'play')
+      spyOn(script, 'play');
 
       script.setupAndStart();
     });
 
     it('should call setup method', function () {
-      expect(script.setup).toHaveBeenCalled()
+      expect(script.setup).toHaveBeenCalled();
     });
 
     it('should call play method', function () {
-      expect(script.play).toHaveBeenCalledWith(true)
+      expect(script.play).toHaveBeenCalledWith(true);
     });
-  })
+  });
 
   describe('.mergeArgs', function () {
     it('should return the a merged object', function () {
@@ -139,7 +139,8 @@ describe('TemporizedSlider', function () {
         title: '',
         text: ''
       }
-      DOMHandler = selectorDouble()
+
+      DOMHandler = selectorDouble();
 
       script.changeContent(obj, DOMHandler);
     });
@@ -161,7 +162,7 @@ describe('TemporizedSlider', function () {
 
       result = TemporizedSlider.applyEventFor('myElm', function(){}, DOMHandler);
 
-      expect(result).not.toBeUndefined()
+      expect(result).not.toBeUndefined();
     });
   });
 });

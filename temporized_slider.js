@@ -86,7 +86,7 @@ var TemporizedSlider = {};
 
   TemporizedSlider.mergeArgs = function (args, default_args) {
     for(var index in default_args) {
-      if(typeof args[index] === "undefined")
+      if(!args[index])
         args[index] = default_args[index];
     }
 
@@ -101,6 +101,10 @@ var TemporizedSlider = {};
       pointer = (pointer + 1 > end) ? 0 : (pointer + 1);
 
       TemporizedSlider.changeContent();
+
+      if (args.gallery.load)
+        TemporizedSlider.markGalleryItemAsCurrent(pointer);
+
       TemporizedSlider.scheduleNextChange();
     }
   };
@@ -123,13 +127,20 @@ var TemporizedSlider = {};
 
     TemporizedSlider.changeContent(obj);
 
-    if(!paused) TemporizedSlider.scheduleNextChange();
+    if (args.gallery.load)
+      TemporizedSlider.markGalleryItemAsCurrent(pointer);
+
+    if(!paused)
+      TemporizedSlider.scheduleNextChange();
   };
 
   TemporizedSlider.next = function() {
     pointer = (pointer + 1 <= end) ? (pointer + 1) : 0;
 
     TemporizedSlider.changeContent();
+
+    if (args.gallery.load)
+      TemporizedSlider.markGalleryItemAsCurrent(pointer);
 
     if(!paused) TemporizedSlider.scheduleNextChange();
   };
@@ -140,8 +151,6 @@ var TemporizedSlider = {};
     DOMHandler.getElementById(args.image_id).src = obj.image;
     DOMHandler.getElementById(args.title_id).innerHTML = obj.title;
     DOMHandler.getElementById(args.text_id).innerHTML = obj.text;
-
-    if (args.gallery.load) TemporizedSlider.markGalleryItemAsCurrent(pointer);
 
     if (args.afterChange != null) args.afterChange();
   };
