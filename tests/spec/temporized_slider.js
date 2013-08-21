@@ -6,6 +6,22 @@ describe('TemporizedSlider', function () {
     time  : 18
   }];
 
+  function selectorDouble () {
+    var selector = {
+      getElementById: function () {}
+    }
+
+    spyOn(selector, 'getElementById').andReturn(
+      {
+        onClick: undefined,
+        src: undefined,
+        innerHTML: undefined
+      }
+    );
+
+    return selector;
+  }
+
   var script = undefined;
 
   beforeEach(function () {
@@ -57,7 +73,7 @@ describe('TemporizedSlider', function () {
 
     // it('should call trigger the afterSetup callback', function () {
     //   options = {
-    //     data: '',
+    //     data: data,
     //     afterSetup: function () {}
     //   }
 
@@ -67,25 +83,29 @@ describe('TemporizedSlider', function () {
 
     //   expect(options.afterSetup).toHaveBeenCalled();
     // });
+
+    it('should return the reference for the main object', function () {
+      spyOn(script, 'loadGallery');
+
+      expect(script.setup({data: data})).toEqual(script);
+    })
   });
 
   describe('.setupAndStart', function () {
     beforeEach(function () {
-      spyOn(script, 'setup')
+      spyOn(script, 'setup').andReturn(script);
       spyOn(script, 'play')
+
+      script.setupAndStart();
     });
 
     it('should call setup method', function () {
-      script.setupAndStart();
-
       expect(script.setup).toHaveBeenCalled()
-    })
+    });
 
     it('should call play method', function () {
-      script.setupAndStart();
-
       expect(script.play).toHaveBeenCalled()
-    })
+    });
   })
 
   describe('.mergeArgs', function () {
@@ -119,16 +139,29 @@ describe('TemporizedSlider', function () {
         title: '',
         text: ''
       }
-      DOMHandler = {
-        getElementById: function () {}
-      }
-
-      spyOn(DOMHandler, 'getElementById').andReturn({
-        src: undefined,
-        innerHTML: undefined,
-      })
+      DOMHandler = selectorDouble()
 
       script.changeContent(obj, DOMHandler);
-    })
-  })
+    });
+  });
+
+  describe('.loadControls', function () {
+    it('should not load the controls if not requested', function () {
+      spyOn(TemporizedSlider, 'applyEventFor');
+
+      TemporizedSlider.loadControls({load: false});
+
+      expect(TemporizedSlider.applyEventFor).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('.applyEventFor', function () {
+    it('should attach the event handler', function () {
+      DOMHandler = selectorDouble();
+
+      result = TemporizedSlider.applyEventFor('myElm', function(){}, DOMHandler);
+
+      expect(result).not.toBeUndefined()
+    });
+  });
 });

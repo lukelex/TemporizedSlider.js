@@ -25,8 +25,8 @@ var TemporizedSlider = {};
       args.controls, TemporizedSlider.defaultArgs.controls
     );
 
-    if (args.controls.load) TemporizedSlider.loadControls();
-    if (args.gallery.load) TemporizedSlider.loadGallery();
+    TemporizedSlider.loadControls(options.controls);
+    TemporizedSlider.loadGallery(options.gallery);
 
     collection = options.data;
 
@@ -36,11 +36,12 @@ var TemporizedSlider = {};
     paused = false;
 
     if (args.afterSetup != null) args.afterSetup();
+
+    return this;
   };
 
   TemporizedSlider.setupAndStart = function (options) {
-    TemporizedSlider.setup(options);
-    TemporizedSlider.play(true);
+    TemporizedSlider.setup(options).play();
   }
 
   TemporizedSlider.validateOptions = function (options) {
@@ -150,37 +151,42 @@ var TemporizedSlider = {};
     timeOut = setTimeout('TemporizedSlider.play(true)', collection[pointer].time * 1000);
   };
 
-  TemporizedSlider.loadControls = function() {
-    var play_control = document.getElementById(args.controls.ids.play);
-    if (play_control) {
-      play_control.onclick = function() {
-        args.controls.functions.play();
-      };
-    }
+  TemporizedSlider.applyEventFor = function (elm, event, DOMHandler) {
+    if (!DOMHandler)
+      DOMHandler = document;
 
-    var pause_control = document.getElementById(args.controls.ids.pause);
-    if (pause_control) {
-      pause_control.onclick = function() {
-        args.controls.functions.pause();
-      };
+    var htmlElm = DOMHandler.getElementById(elm);
+    if (htmlElm) {
+      htmlElm.onclick = event;
+      return htmlElm;
     }
+  }
 
-    var previous_control = document.getElementById(args.controls.ids.previous);
-    if (previous_control) {
-      previous_control.onclick = function() {
-        args.controls.functions.previous();
-      };
-    }
+  TemporizedSlider.loadControls = function(controls) {
+    if (!controls.load)
+      return false;
 
-    var next_control = document.getElementById(args.controls.ids.next);
-    if (next_control) {
-      next_control.onclick = function() {
-        args.controls.functions.next();
-      };
-    }
+    TemporizedSlider.applyEventFor(
+      controls.ids.play, controls.functions.play
+    );
+
+    TemporizedSlider.applyEventFor(
+      controls.ids.pause, controls.functions.pause
+    );
+
+    TemporizedSlider.applyEventFor(
+      controls.ids.previous, controls.functions.previous
+    );
+
+    TemporizedSlider.applyEventFor(
+      controls.ids.next, controls.functions.next
+    );
   };
 
-  TemporizedSlider.loadGallery = function() {
+  TemporizedSlider.loadGallery = function(gallery) {
+    if (!gallery.load)
+      return false;
+
     var gallery = document.getElementById(args.gallery.id);
     var imgUrl, title, container, galleryImgItem;
     for(var i in args.data) {
