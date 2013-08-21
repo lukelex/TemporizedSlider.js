@@ -6,6 +6,12 @@ describe('TemporizedSlider', function () {
     time  : 18
   }];
 
+  var script = undefined;
+
+  beforeEach(function () {
+    script = TemporizedSlider;
+  })
+
   describe('.setup', function () {
     it('should call trigger the beforeSetup callback', function () {
       var options = jasmine.createSpyObj(
@@ -14,7 +20,7 @@ describe('TemporizedSlider', function () {
 
       options.data = {}
 
-      TemporizedSlider.setup(options);
+      script.setup(options);
 
       expect(options.beforeSetup).toHaveBeenCalled();
     });
@@ -30,22 +36,22 @@ describe('TemporizedSlider', function () {
         }
       }
 
-      spyOn(TemporizedSlider, 'loadControls');
+      spyOn(script, 'loadControls');
 
-      TemporizedSlider.setup(options);
+      script.setup(options);
 
-      expect(TemporizedSlider.loadControls).toHaveBeenCalled();
+      expect(script.loadControls).toHaveBeenCalled();
     })
 
     it('should throw an exception if no options is provided', function () {
       expect(function () {
-        TemporizedSlider.setup()
+        script.setup()
       }).toThrow();
     })
 
     it('should throw an exception if no data is provided', function () {
       expect(function () {
-        TemporizedSlider.setup({})
+        script.setup({})
       }).toThrow();
     })
 
@@ -57,11 +63,30 @@ describe('TemporizedSlider', function () {
 
     //   spyOn(options, 'afterSetup');
 
-    //   TemporizedSlider.setup(options);
+    //   script.setup(options);
 
     //   expect(options.afterSetup).toHaveBeenCalled();
     // });
   });
+
+  describe('.setupAndStart', function () {
+    beforeEach(function () {
+      spyOn(script, 'setup')
+      spyOn(script, 'play')
+    });
+
+    it('should call setup method', function () {
+      script.setupAndStart();
+
+      expect(script.setup).toHaveBeenCalled()
+    })
+
+    it('should call play method', function () {
+      script.setupAndStart();
+
+      expect(script.play).toHaveBeenCalled()
+    })
+  })
 
   describe('.mergeArgs', function () {
     it('should return the a merged object', function () {
@@ -70,7 +95,7 @@ describe('TemporizedSlider', function () {
 
       expectedResult = {a: 'a', b: 'b'}
 
-      result = TemporizedSlider.mergeArgs(options, defaultOptions);
+      result = script.mergeArgs(options, defaultOptions);
 
       expect(result).toEqual(expectedResult);
     });
@@ -81,7 +106,7 @@ describe('TemporizedSlider', function () {
 
       expectedResult = {a: 'a'}
 
-      result = TemporizedSlider.mergeArgs(options, defaultOptions);
+      result = script.mergeArgs(options, defaultOptions);
 
       expect(result).toEqual(expectedResult);
     });
@@ -103,7 +128,7 @@ describe('TemporizedSlider', function () {
         innerHTML: undefined,
       })
 
-      TemporizedSlider.changeContent(obj, DOMHandler);
+      script.changeContent(obj, DOMHandler);
     })
   })
 });

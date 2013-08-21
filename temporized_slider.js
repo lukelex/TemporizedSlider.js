@@ -1,5 +1,5 @@
 /**
- * TemporizedSlider.js v2.0
+ * TemporizedSlider.js v2.1.0
  *
  * Copyright 2012, Lukas Alexandre
  * Licensed under MIT
@@ -37,6 +37,11 @@ var TemporizedSlider = {};
 
     if (args.afterSetup != null) args.afterSetup();
   };
+
+  TemporizedSlider.setupAndStart = function (options) {
+    TemporizedSlider.setup(options);
+    TemporizedSlider.play(true);
+  }
 
   TemporizedSlider.validateOptions = function (options) {
     if (!options) throw new Error('No options provided');
