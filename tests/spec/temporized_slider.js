@@ -54,11 +54,11 @@ describe('TemporizedSlider', function () {
         }
       }
 
-      spyOn(script, 'loadControls');
+      spyOn(script, '$loadControls');
 
       script.setup(options);
 
-      expect(script.loadControls).toHaveBeenCalled();
+      expect(script.$loadControls).toHaveBeenCalled();
     });
 
     it('should throw an exception if no options is provided', function () {
@@ -87,7 +87,7 @@ describe('TemporizedSlider', function () {
     // });
 
     it('should return the reference for the main object', function () {
-      spyOn(script, 'loadGallery');
+      spyOn(script, '$loadGallery');
 
       expect(script.setup({data: data})).toEqual(script);
     });
@@ -96,7 +96,7 @@ describe('TemporizedSlider', function () {
   describe('.setupAndStart', function () {
     beforeEach(function () {
       spyOn(script, 'setup').andReturn(script);
-      spyOn(script, 'play');
+      spyOn(script, '$play');
 
       script.setupAndStart();
     });
@@ -106,7 +106,7 @@ describe('TemporizedSlider', function () {
     });
 
     it('should call play method', function () {
-      expect(script.play).toHaveBeenCalledWith(true);
+      expect(script.$play).toHaveBeenCalledWith(true);
     });
   });
 
@@ -117,7 +117,7 @@ describe('TemporizedSlider', function () {
 
       expectedResult = {a: 'a', b: 'b'}
 
-      result = script.mergeArgs(options, defaultOptions);
+      result = script.$mergeArgs(options, defaultOptions);
 
       expect(result).toEqual(expectedResult);
     });
@@ -128,7 +128,7 @@ describe('TemporizedSlider', function () {
 
       expectedResult = {a: 'a'}
 
-      result = script.mergeArgs(options, defaultOptions);
+      result = script.$mergeArgs(options, defaultOptions);
 
       expect(result).toEqual(expectedResult);
     });
@@ -144,19 +144,20 @@ describe('TemporizedSlider', function () {
 
       selectorDouble();
 
-      spyOn(TemporizedSlider, 'getElement').andReturn(mockElm);
+      spyOn(script, '$getElement').andReturn(mockElm);
     });
 
     it('should set the html properties from the obj', function () {
-      script.changeContent(obj, {});
+      console.log(script);
+      script.$changeContent(obj, {});
 
-      expect(TemporizedSlider.getElement.calls.length).toEqual(3);
+      expect(script.$getElement.calls.length).toEqual(3);
     });
 
     it('should trigger the afterChange callback', function () {
       callback = jasmine.createSpy('callback')
 
-      script.changeContent(obj, {}, callback);
+      script.$changeContent(obj, {}, callback);
 
       expect(callback).toHaveBeenCalled();
     });
@@ -166,7 +167,7 @@ describe('TemporizedSlider', function () {
     it('should forward to the getElementById', function() {
       DOMHandler = selectorDouble();
 
-      TemporizedSlider.getElement('some-id', DOMHandler);
+      script.$getElement('some-id', DOMHandler);
 
       expect(DOMHandler.getElementById).toHaveBeenCalled();
     });
@@ -174,11 +175,11 @@ describe('TemporizedSlider', function () {
 
   describe('.loadControls', function () {
     it('should not load the controls if not requested', function () {
-      spyOn(TemporizedSlider, 'applyEventFor');
+      spyOn(script, '$applyEventFor');
 
-      TemporizedSlider.loadControls({load: false});
+      script.$loadControls({load: false});
 
-      expect(TemporizedSlider.applyEventFor).not.toHaveBeenCalled();
+      expect(script.$applyEventFor).not.toHaveBeenCalled();
     });
   });
 
@@ -186,39 +187,39 @@ describe('TemporizedSlider', function () {
     it('should attach the event handler', function () {
       selectorDouble();
 
-      spyOn(TemporizedSlider, 'getElement').andReturn(mockElm);
+      spyOn(script, '$getElement').andReturn(mockElm);
 
-      result = TemporizedSlider.applyEventFor('myElm', function(){});
+      result = script.$applyEventFor('myElm', function(){});
 
       expect(result).not.toBeUndefined();
     });
   });
 
-  describe('.clearTimer', function () {
+  describe('.$clearTimer', function () {
     it('should clear the timer countdown', function () {
       clearFnc = jasmine.createSpy('clearTimeout');
 
-      TemporizedSlider.clearTimer(timeOut, clearFnc);
+      script.$clearTimer(timeOut, clearFnc);
 
       expect(clearFnc).toHaveBeenCalledWith(timeOut);
     });
   });
 
-  describe('.pause', function () {
+  describe('.$pause', function () {
     it('should trigger the beforePause callback', function() {
       callback = jasmine.createSpy('beforePause');
 
-      TemporizedSlider.pause(false, 1, callback);
+      script.$pause(false, 1, callback);
 
       expect(callback).toHaveBeenCalled();
     });
 
     it('should trigger the beforePause callback', function() {
-      clearFnc = spyOn(TemporizedSlider, 'clearTimer');
+      clearFnc = spyOn(script, '$clearTimer');
 
       timeOut = 50;
 
-      TemporizedSlider.pause(false, timeOut);
+      script.$pause(false, timeOut);
 
       expect(clearFnc).toHaveBeenCalledWith(timeOut);
     });

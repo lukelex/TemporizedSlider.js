@@ -11,22 +11,22 @@ var TemporizedSlider = {};
 
 (function() {
   TemporizedSlider.setup = function(options) {
-    TemporizedSlider.validateOptions(options);
+    TemporizedSlider.$validateOptions(options);
 
     var args = options;
 
     if (args.beforeSetup != null) args.beforeSetup();
 
-    args = TemporizedSlider.mergeArgs(
+    args = TemporizedSlider.$mergeArgs(
       args, TemporizedSlider.defaultArgs
     );
 
-    args.controls = TemporizedSlider.mergeArgs(
+    args.controls = TemporizedSlider.$mergeArgs(
       args.controls, TemporizedSlider.defaultArgs.controls
     );
 
-    TemporizedSlider.loadControls(options.controls);
-    TemporizedSlider.loadGallery(args, options.gallery);
+    TemporizedSlider.$loadControls(options.controls);
+    TemporizedSlider.$loadGallery(args, options.gallery);
 
     collection = options.data;
 
@@ -41,16 +41,16 @@ var TemporizedSlider = {};
   };
 
   TemporizedSlider.setupAndStart = function (options) {
-    TemporizedSlider.setup(options).play(true);
+    TemporizedSlider.setup(options).$play(true);
   }
 
-  TemporizedSlider.validateOptions = function (options) {
+  TemporizedSlider.$validateOptions = function (options) {
     if (!options) throw new Error('No options provided');
     if (!options.data)
       throw new Error('No data provided');
   }
 
-  TemporizedSlider.mergeArgs = function (args, default_args) {
+  TemporizedSlider.$mergeArgs = function (args, default_args) {
     for(var index in default_args) {
       if(!args[index])
         args[index] = default_args[index];
@@ -59,7 +59,7 @@ var TemporizedSlider = {};
     return args;
   }
 
-  TemporizedSlider.play = function(force_play) {
+  TemporizedSlider.$play = function(force_play) {
     if (paused || force_play) {
       if (args.beforePlay != null) args.beforePlay();
 
@@ -75,19 +75,19 @@ var TemporizedSlider = {};
     }
   };
 
-  TemporizedSlider.pause = function(paused, timeOut, beforePause) {
+  TemporizedSlider.$pause = function(paused, timeOut, beforePause) {
     if (!paused) {
       if (beforePause) beforePause();
 
       paused = true;
 
-      TemporizedSlider.clearTimer(timeOut);
+      TemporizedSlider.$clearTimer(timeOut);
 
       pointer = (pointer - 1 < 0) ? 0 : (pointer - 1);
     }
   };
 
-  TemporizedSlider.previous = function() {
+  TemporizedSlider.$previous = function() {
     pointer = (pointer - 1 >= 0) ? (pointer - 1) : end;
 
     var obj = collection[pointer];
@@ -101,7 +101,7 @@ var TemporizedSlider = {};
       TemporizedSlider.scheduleNextChange();
   };
 
-  TemporizedSlider.next = function() {
+  TemporizedSlider.$next = function() {
     pointer = (pointer + 1 <= end) ? (pointer + 1) : 0;
 
     TemporizedSlider.changeContent();
@@ -112,65 +112,65 @@ var TemporizedSlider = {};
     if(!paused) TemporizedSlider.scheduleNextChange();
   };
 
-  TemporizedSlider.clearTimer = function(timeOut, clearTimeoutFnc) {
+  TemporizedSlider.$clearTimer = function(timeOut, clearTimeoutFnc) {
     if (!clearTimeoutFnc) clearTimeoutFnc = clearTimeout;
 
     clearTimeoutFnc(timeOut);
   };
 
-  TemporizedSlider.changeContent = function(obj, targetFields, afterChange) {
-    TemporizedSlider.getElement(targetFields.image_id).src = obj.image;
-    TemporizedSlider.getElement(targetFields.title_id).innerHTML = obj.title;
-    TemporizedSlider.getElement(targetFields.text_id).innerHTML = obj.text;
+  TemporizedSlider.$changeContent = function(obj, targetFields, afterChange) {
+    TemporizedSlider.$getElement(targetFields.image_id).src = obj.image;
+    TemporizedSlider.$getElement(targetFields.title_id).innerHTML = obj.title;
+    TemporizedSlider.$getElement(targetFields.text_id).innerHTML = obj.text;
 
     if (afterChange) afterChange();
   };
 
-  TemporizedSlider.getElement = function (id, DOMHandler) {
+  TemporizedSlider.$getElement = function(id, DOMHandler) {
     if (!DOMHandler) DOMHandler = document;
 
     return DOMHandler.getElementById(id);
   };
 
-  TemporizedSlider.scheduleNextChange = function() {
+  TemporizedSlider.$scheduleNextChange = function() {
     clearTimeout(timeOut);
     timeOut = setTimeout('TemporizedSlider.play(true)', collection[pointer].time * 1000);
   };
 
-  TemporizedSlider.applyEventFor = function (id, event) {
-    var htmlElm = TemporizedSlider.getElement(id);
+  TemporizedSlider.$applyEventFor = function (id, event) {
+    var htmlElm = TemporizedSlider.$getElement(id);
     if (htmlElm) {
       htmlElm.onclick = event;
       return htmlElm;
     }
   }
 
-  TemporizedSlider.loadControls = function(controls) {
+  TemporizedSlider.$loadControls = function(controls) {
     if (!controls.load)
       return false;
 
-    TemporizedSlider.applyEventFor(
+    TemporizedSlider.$applyEventFor(
       controls.ids.play, controls.functions.play
     );
 
-    TemporizedSlider.applyEventFor(
+    TemporizedSlider.$applyEventFor(
       controls.ids.pause, controls.functions.pause
     );
 
-    TemporizedSlider.applyEventFor(
+    TemporizedSlider.$applyEventFor(
       controls.ids.previous, controls.functions.previous
     );
 
-    TemporizedSlider.applyEventFor(
+    TemporizedSlider.$applyEventFor(
       controls.ids.next, controls.functions.next
     );
   };
 
-  TemporizedSlider.loadGallery = function(args, gallery) {
+  TemporizedSlider.$loadGallery = function(args, gallery) {
     if (!gallery.load)
       return false;
 
-    var gallery = TemporizedSlider.getElement(args.gallery.id);
+    var gallery = TemporizedSlider.$getElement(args.gallery.id);
     var imgUrl, title, container, galleryImgItem;
     for(var i in args.data) {
       imgUrl = args.data[i].image;
@@ -181,13 +181,13 @@ var TemporizedSlider = {};
     };
   };
 
-  TemporizedSlider.GalleryItemClick = function(e) {
+  TemporizedSlider.$GalleryItemClick = function(e) {
     TemporizedSlider.changeContent(e.dataset.index);
     if(!paused) TemporizedSlider.scheduleNextChange();
     TemporizedSlider.markGalleryItemAsCurrent(e);
   }
 
-  TemporizedSlider.markGalleryItemAsCurrent = function(elem) {
+  TemporizedSlider.$markGalleryItemAsCurrent = function(elem) {
     var imgs = document.getElementsByClassName('gallery_img');
     for(var i in imgs) {
       if (typeof imgs[i] === "object") {
