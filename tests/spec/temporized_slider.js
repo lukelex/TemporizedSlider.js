@@ -184,9 +184,11 @@ describe('TemporizedSlider', function () {
 
   describe('.applyEventFor', function () {
     it('should attach the event handler', function () {
-      DOMHandler = selectorDouble();
+      selectorDouble();
 
-      result = TemporizedSlider.applyEventFor('myElm', function(){}, DOMHandler);
+      spyOn(TemporizedSlider, 'getElement').andReturn(mockElm);
+
+      result = TemporizedSlider.applyEventFor('myElm', function(){});
 
       expect(result).not.toBeUndefined();
     });

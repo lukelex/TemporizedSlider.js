@@ -130,11 +130,8 @@ var TemporizedSlider = {};
     timeOut = setTimeout('TemporizedSlider.play(true)', collection[pointer].time * 1000);
   };
 
-  TemporizedSlider.applyEventFor = function (elm, event, DOMHandler) {
-    if (!DOMHandler)
-      DOMHandler = document;
-
-    var htmlElm = TemporizedSlider.getElement(elm);
+  TemporizedSlider.applyEventFor = function (id, event) {
+    var htmlElm = TemporizedSlider.getElement(id);
     if (htmlElm) {
       htmlElm.onclick = event;
       return htmlElm;
