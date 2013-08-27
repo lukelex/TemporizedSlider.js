@@ -13,7 +13,7 @@ var TemporizedSlider = {};
   TemporizedSlider.setup = function(options) {
     TemporizedSlider.validateOptions(options);
 
-    args = options;
+    var args = options;
 
     if (args.beforeSetup != null) args.beforeSetup();
 
@@ -26,7 +26,7 @@ var TemporizedSlider = {};
     );
 
     TemporizedSlider.loadControls(options.controls);
-    TemporizedSlider.loadGallery(options.gallery);
+    TemporizedSlider.loadGallery(args, options.gallery);
 
     collection = options.data;
 
@@ -49,40 +49,6 @@ var TemporizedSlider = {};
     if (!options.data)
       throw new Error('No data provided');
   }
-
-  TemporizedSlider.defaultArgs = {
-    default_time : 0,
-    image_id : 'slider_image',
-    title_id : 'slider_title',
-    text_id : 'slider_text',
-    controls : {
-      load : true,
-      ids : {
-        play : 'play_control',
-        pause : 'pause_control',
-        previous : 'previous_control',
-        next : 'next_control'
-      },
-      functions : {
-        play : function() {
-          TemporizedSlider.play();
-        },
-        pause : function() {
-          TemporizedSlider.pause();
-        },
-        previous : function() {
-          TemporizedSlider.previous();
-        },
-        next : function() {
-          TemporizedSlider.next();
-        }
-      }
-    },
-    gallery : {
-      load : true,
-      id : "slider_gallery"
-    }
-  };
 
   TemporizedSlider.mergeArgs = function (args, default_args) {
     for(var index in default_args) {
@@ -145,14 +111,18 @@ var TemporizedSlider = {};
     if(!paused) TemporizedSlider.scheduleNextChange();
   };
 
-  TemporizedSlider.changeContent = function(obj, DOMHandler) {
+  TemporizedSlider.changeContent = function(obj, targetFields, afterChange) {
+    TemporizedSlider.getElement(targetFields.image_id).src = obj.image;
+    TemporizedSlider.getElement(targetFields.title_id).innerHTML = obj.title;
+    TemporizedSlider.getElement(targetFields.text_id).innerHTML = obj.text;
+
+    if (afterChange) afterChange();
+  };
+
+  TemporizedSlider.getElement = function (id, DOMHandler) {
     if (!DOMHandler) DOMHandler = document;
 
-    DOMHandler.getElementById(args.image_id).src = obj.image;
-    DOMHandler.getElementById(args.title_id).innerHTML = obj.title;
-    DOMHandler.getElementById(args.text_id).innerHTML = obj.text;
-
-    if (args.afterChange != null) args.afterChange();
+    return DOMHandler.getElementById(id);
   };
 
   TemporizedSlider.scheduleNextChange = function() {
@@ -164,7 +134,7 @@ var TemporizedSlider = {};
     if (!DOMHandler)
       DOMHandler = document;
 
-    var htmlElm = DOMHandler.getElementById(elm);
+    var htmlElm = TemporizedSlider.getElement(elm);
     if (htmlElm) {
       htmlElm.onclick = event;
       return htmlElm;
@@ -192,11 +162,11 @@ var TemporizedSlider = {};
     );
   };
 
-  TemporizedSlider.loadGallery = function(gallery) {
+  TemporizedSlider.loadGallery = function(args, gallery) {
     if (!gallery.load)
       return false;
 
-    var gallery = document.getElementById(args.gallery.id);
+    var gallery = TemporizedSlider.getElement(args.gallery.id);
     var imgUrl, title, container, galleryImgItem;
     for(var i in args.data) {
       imgUrl = args.data[i].image;
@@ -222,5 +192,39 @@ var TemporizedSlider = {};
     }
     if (typeof elem === 'number') elem = imgs[elem];
     elem.className += ' current';
+  };
+
+  TemporizedSlider.defaultArgs = {
+    default_time : 0,
+    image_id : 'slider_image',
+    title_id : 'slider_title',
+    text_id : 'slider_text',
+    controls : {
+      load : true,
+      ids : {
+        play : 'play_control',
+        pause : 'pause_control',
+        previous : 'previous_control',
+        next : 'next_control'
+      },
+      functions : {
+        play : function() {
+          TemporizedSlider.play();
+        },
+        pause : function() {
+          TemporizedSlider.pause();
+        },
+        previous : function() {
+          TemporizedSlider.previous();
+        },
+        next : function() {
+          TemporizedSlider.next();
+        }
+      }
+    },
+    gallery : {
+      load : true,
+      id : "slider_gallery"
+    }
   };
 })()

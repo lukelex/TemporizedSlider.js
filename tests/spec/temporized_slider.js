@@ -6,18 +6,20 @@ describe('TemporizedSlider', function () {
     time  : 18
   }];
 
+  var mockElm = undefined
+
   function selectorDouble () {
     var selector = {
       getElementById: function () {}
     }
 
-    spyOn(selector, 'getElementById').andReturn(
-      {
-        onClick: undefined,
-        src: undefined,
-        innerHTML: undefined
-      }
-    );
+    mockElm = {
+      onClick: undefined,
+      src: undefined,
+      innerHTML: undefined
+    }
+
+    spyOn(selector, 'getElementById').andReturn(mockElm);
 
     return selector;
   }
@@ -88,7 +90,7 @@ describe('TemporizedSlider', function () {
       spyOn(script, 'loadGallery');
 
       expect(script.setup({data: data})).toEqual(script);
-    })
+    });
   });
 
   describe('.setupAndStart', function () {
@@ -133,16 +135,40 @@ describe('TemporizedSlider', function () {
   });
 
   describe('.changeContent', function () {
-    it('should set the html properties from the obj', function () {
+    beforeEach(function () {
       obj = {
         image: '',
         title: '',
         text: ''
       }
 
+      selectorDouble();
+
+      spyOn(TemporizedSlider, 'getElement').andReturn(mockElm);
+    });
+
+    it('should set the html properties from the obj', function () {
+      script.changeContent(obj, {});
+
+      expect(TemporizedSlider.getElement.calls.length).toEqual(3);
+    });
+
+    it('should trigger the afterChange callback', function () {
+      callback = jasmine.createSpy('callback')
+
+      script.changeContent(obj, {}, callback);
+
+      expect(callback).toHaveBeenCalled();
+    });
+  });
+
+  describe('.getElement', function () {
+    it('should forward to the getElementById', function() {
       DOMHandler = selectorDouble();
 
-      script.changeContent(obj, DOMHandler);
+      TemporizedSlider.getElement('some-id', DOMHandler);
+
+      expect(DOMHandler.getElementById).toHaveBeenCalled();
     });
   });
 
