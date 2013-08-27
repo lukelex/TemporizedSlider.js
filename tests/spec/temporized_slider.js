@@ -196,9 +196,29 @@ describe('TemporizedSlider', function () {
 
   describe('.clearTimer', function () {
     it('should clear the timer countdown', function () {
-      clearFnc = jasmine.createSpy('clearTimeout')
+      clearFnc = jasmine.createSpy('clearTimeout');
 
       TemporizedSlider.clearTimer(timeOut, clearFnc);
+
+      expect(clearFnc).toHaveBeenCalledWith(timeOut);
+    });
+  });
+
+  describe('.pause', function () {
+    it('should trigger the beforePause callback', function() {
+      callback = jasmine.createSpy('beforePause');
+
+      TemporizedSlider.pause(false, 1, callback);
+
+      expect(callback).toHaveBeenCalled();
+    });
+
+    it('should trigger the beforePause callback', function() {
+      clearFnc = spyOn(TemporizedSlider, 'clearTimer');
+
+      timeOut = 50;
+
+      TemporizedSlider.pause(false, timeOut);
 
       expect(clearFnc).toHaveBeenCalledWith(timeOut);
     });

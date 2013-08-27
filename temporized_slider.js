@@ -75,9 +75,9 @@ var TemporizedSlider = {};
     }
   };
 
-  TemporizedSlider.pause = function() {
+  TemporizedSlider.pause = function(paused, timeOut, beforePause) {
     if (!paused) {
-      if (args.beforePause != null) args.beforePause();
+      if (beforePause) beforePause();
 
       paused = true;
 
