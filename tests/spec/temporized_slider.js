@@ -193,4 +193,14 @@ describe('TemporizedSlider', function () {
       expect(result).not.toBeUndefined();
     });
   });
+
+  describe('.clearTimer', function () {
+    it('should clear the timer countdown', function () {
+      clearFnc = jasmine.createSpy('clearTimeout')
+
+      TemporizedSlider.clearTimer(timeOut, clearFnc);
+
+      expect(clearFnc).toHaveBeenCalledWith(timeOut);
+    });
+  });
 });

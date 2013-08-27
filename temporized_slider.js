@@ -81,7 +81,8 @@ var TemporizedSlider = {};
 
       paused = true;
 
-      clearTimeout(timeOut);
+      TemporizedSlider.clearTimer(timeOut);
+
       pointer = (pointer - 1 < 0) ? 0 : (pointer - 1);
     }
   };
@@ -109,6 +110,12 @@ var TemporizedSlider = {};
       TemporizedSlider.markGalleryItemAsCurrent(pointer);
 
     if(!paused) TemporizedSlider.scheduleNextChange();
+  };
+
+  TemporizedSlider.clearTimer = function(timeOut, clearTimeoutFnc) {
+    if (!clearTimeoutFnc) clearTimeoutFnc = clearTimeout;
+
+    clearTimeoutFnc(timeOut);
   };
 
   TemporizedSlider.changeContent = function(obj, targetFields, afterChange) {
