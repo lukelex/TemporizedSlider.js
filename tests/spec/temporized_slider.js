@@ -110,7 +110,7 @@ describe('TemporizedSlider', function () {
     });
   });
 
-  describe('.mergeArgs', function () {
+  describe('.$mergeArgs', function () {
     it('should return the a merged object', function () {
       options         = {a: 'a'}
       defaultOptions  = {b: 'b'}
@@ -134,7 +134,7 @@ describe('TemporizedSlider', function () {
     });
   });
 
-  describe('.changeContent', function () {
+  describe('.$changeContent', function () {
     beforeEach(function () {
       obj = {
         image: '',
@@ -163,7 +163,7 @@ describe('TemporizedSlider', function () {
     });
   });
 
-  describe('.getElement', function () {
+  describe('.$getElement', function () {
     it('should forward to the getElementById', function() {
       DOMHandler = selectorDouble();
 
@@ -173,7 +173,7 @@ describe('TemporizedSlider', function () {
     });
   });
 
-  describe('.loadControls', function () {
+  describe('.$loadControls', function () {
     it('should not load the controls if not requested', function () {
       spyOn(script, '$applyEventFor');
 
@@ -183,7 +183,7 @@ describe('TemporizedSlider', function () {
     });
   });
 
-  describe('.applyEventFor', function () {
+  describe('.$applyEventFor', function () {
     it('should attach the event handler', function () {
       selectorDouble();
 
@@ -222,6 +222,46 @@ describe('TemporizedSlider', function () {
       script.$pause(false, timeOut);
 
       expect(clearFnc).toHaveBeenCalledWith(timeOut);
+    });
+  });
+
+  describe('.play', function () {
+    it('should forward to $play', function () {
+      spyOn(script, '$play');
+
+      script.play();
+
+      expect(script.$play).toHaveBeenCalled();
+    });
+  });
+
+  describe('.pause', function () {
+    it('should forward to $pause', function () {
+      spyOn(script, '$pause');
+
+      script.pause();
+
+      expect(script.$pause).toHaveBeenCalled();
+    });
+  });
+
+  describe('.next', function () {
+    it('should forward to $next', function () {
+      spyOn(script, '$next');
+
+      script.next();
+
+      expect(script.$next).toHaveBeenCalled();
+    });
+  });
+
+  describe('.previous', function () {
+    it('should forward to $previous', function () {
+      spyOn(script, '$previous');
+
+      script.previous();
+
+      expect(script.$previous).toHaveBeenCalled();
     });
   });
 });

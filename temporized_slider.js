@@ -10,6 +10,23 @@
 var TemporizedSlider = {};
 
 (function() {
+  // public facing methods
+  TemporizedSlider.play = function() {
+    TemporizedSlider.$play()
+  };
+
+  TemporizedSlider.pause = function() {
+    TemporizedSlider.$pause()
+  };
+
+  TemporizedSlider.next = function() {
+    TemporizedSlider.$next()
+  };
+
+  TemporizedSlider.previous = function() {
+    TemporizedSlider.$previous()
+  };
+
   TemporizedSlider.setup = function(options) {
     TemporizedSlider.$validateOptions(options);
 
