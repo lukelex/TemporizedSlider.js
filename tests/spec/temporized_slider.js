@@ -164,7 +164,7 @@ describe('TemporizedSlider', function () {
   });
 
   describe('.$getElement', function () {
-    it('should forward to the getElementById', function() {
+    it('should forward to getElementById', function() {
       DOMHandler = selectorDouble();
 
       script.$getElement('some-id', DOMHandler);
@@ -214,7 +214,7 @@ describe('TemporizedSlider', function () {
       expect(callback).toHaveBeenCalled();
     });
 
-    it('should trigger the beforePause callback', function() {
+    it('should clear the timer', function() {
       clearFnc = spyOn(script, '$clearTimer');
 
       timeOut = 50;
@@ -222,6 +222,14 @@ describe('TemporizedSlider', function () {
       script.$pause(false, timeOut);
 
       expect(clearFnc).toHaveBeenCalledWith(timeOut);
+    });
+
+    it('should not execute if slider is already paused', function() {
+      clearFnc = spyOn(script, '$clearTimer');
+
+      script.$pause(true);
+
+      expect(clearFnc).not.toHaveBeenCalled();
     });
   });
 
@@ -262,6 +270,34 @@ describe('TemporizedSlider', function () {
       script.previous();
 
       expect(script.$previous).toHaveBeenCalled();
+    });
+  });
+
+  describe('.$play', function() {
+    it('should trigger the beforePlay callback', function() {
+      var options = jasmine.createSpyObj(
+        'options', ['beforePlay']
+      )
+
+      spyOn(TemporizedSlider, '$changeContent');
+      spyOn(TemporizedSlider, '$scheduleNextChange');
+
+      script.$play(true, options.beforePlay);
+
+      expect(options.beforePlay).toHaveBeenCalled();
+    });
+
+    it('should trigger the afterPlay callback', function() {
+      var options = jasmine.createSpyObj(
+        'options', ['afterPlay']
+      )
+
+      spyOn(TemporizedSlider, '$changeContent');
+      spyOn(TemporizedSlider, '$scheduleNextChange');
+
+      script.$play(true, undefined, options.afterPlay);
+
+      expect(options.afterPlay).toHaveBeenCalled();
     });
   });
 });

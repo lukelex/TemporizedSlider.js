@@ -12,19 +12,19 @@ var TemporizedSlider = {};
 (function() {
   // public facing methods
   TemporizedSlider.play = function() {
-    TemporizedSlider.$play()
+    TemporizedSlider.$play();
   };
 
   TemporizedSlider.pause = function() {
-    TemporizedSlider.$pause()
+    TemporizedSlider.$pause();
   };
 
   TemporizedSlider.next = function() {
-    TemporizedSlider.$next()
+    TemporizedSlider.$next();
   };
 
   TemporizedSlider.previous = function() {
-    TemporizedSlider.$previous()
+    TemporizedSlider.$previous();
   };
 
   TemporizedSlider.setup = function(options) {
@@ -76,19 +76,20 @@ var TemporizedSlider = {};
     return args;
   }
 
-  TemporizedSlider.$play = function(force_play) {
+  TemporizedSlider.$play = function(force_play, beforePlay, afterPlay) {
     if (paused || force_play) {
-      if (args.beforePlay != null) args.beforePlay();
+      if (beforePlay) beforePlay();
 
       paused = false;
       pointer = (pointer + 1 > end) ? 0 : (pointer + 1);
 
-      TemporizedSlider.changeContent();
+      TemporizedSlider.$changeContent();
 
-      if (args.gallery.load)
-        TemporizedSlider.markGalleryItemAsCurrent(pointer);
+      if (afterPlay) afterPlay();
+      // if (args.gallery.load)
+      //   TemporizedSlider.markGalleryItemAsCurrent(pointer);
 
-      TemporizedSlider.scheduleNextChange();
+      TemporizedSlider.$scheduleNextChange();
     }
   };
 
