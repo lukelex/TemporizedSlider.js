@@ -7,110 +7,129 @@
  * @module temporized_slider
 */
 
-var TemporizedSlider = {};
+var TemporizedSlider;
 
 (function() {
-  // public facing methods
-  TemporizedSlider.play = function() {
-    TemporizedSlider.$play();
-  };
+  TemporizedSlider = {
+    // public facing methods
+    setupAndStart: function(options) {
+      TemporizedSlider.setup(options).$play(TemporizedSlider.$slider);
+    },
+    play: function() {
+      TemporizedSlider.$play(TemporizedSlider.$slider);
+    },
+    pause: function() {
+      TemporizedSlider.$pause(TemporizedSlider.$slider);
+    },
+    next: function() {
+      TemporizedSlider.$next(TemporizedSlider.$slider);
+    },
+    previous: function() {
+      TemporizedSlider.$previous(TemporizedSlider.$slider);
+    },
+    setup: function(options) {
+      TemporizedSlider.$validateOptions(options);
 
-  TemporizedSlider.pause = function() {
-    TemporizedSlider.$pause();
-  };
+      var args = options;
 
-  TemporizedSlider.next = function() {
-    TemporizedSlider.$next();
-  };
+      if (args.beforeSetup) args.beforeSetup();
 
-  TemporizedSlider.previous = function() {
-    TemporizedSlider.$previous();
-  };
+      args = TemporizedSlider.$mergeArgs(
+        args, TemporizedSlider.defaultArgs
+      );
 
-  TemporizedSlider.setup = function(options) {
-    TemporizedSlider.$validateOptions(options);
+      args.controls = TemporizedSlider.$mergeArgs(
+        args.controls, TemporizedSlider.defaultArgs.controls
+      );
 
-    var args = options;
+      var slider = TemporizedSlider.$slider =
+        new TemporizedSlider.Slider(args);
 
-    if (args.beforeSetup != null) args.beforeSetup();
+      if (slider.controls && slider.controls.load)
+        TemporizedSlider.$loadControls(slider.controls);
 
-    args = TemporizedSlider.$mergeArgs(
-      args, TemporizedSlider.defaultArgs
-    );
+      if (slider.gallery && slider.gallery.load)
+        TemporizedSlider.$loadGallery(slider.gallery, slider.slides);
 
-    args.controls = TemporizedSlider.$mergeArgs(
-      args.controls, TemporizedSlider.defaultArgs.controls
-    );
+      timeOut = null;
 
-    TemporizedSlider.$loadControls(options.controls);
-    TemporizedSlider.$loadGallery(args, options.gallery);
+      if (slider.afterSetup) slider.afterSetup();
 
-    collection = options.data;
+      return this;
+    },
+    // private methods
+    $validateOptions: function(options) {
+      if (!options)
+        throw new Error('No options were provided');
+      if (!options.slides)
+        throw new Error('No slides were provided');
+    },
+    $mergeArgs: function (args, default_args) {
+      for(var index in default_args) {
+        if(!args[index])
+          args[index] = default_args[index];
+      }
 
-    pointer = -1;
-    end = collection.length - 1;
-    timeOut = null;
-    paused = false;
+      return args;
+    },
+    $clearTimer: function(timeOut, clearTimeoutFnc) {
+      if (!clearTimeoutFnc) clearTimeoutFnc = clearTimeout;
 
-    if (args.afterSetup != null) args.afterSetup();
+      clearTimeoutFnc(timeOut);
+    },
+    $play: function(slider) {
+      if (slider.paused) {
+        if (slider.beforePlay) slider.beforePlay();
 
-    return this;
-  };
+        slider.unpause();
 
-  TemporizedSlider.setupAndStart = function (options) {
-    TemporizedSlider.setup(options).$play(true);
-  }
+        TemporizedSlider.$setNextSlide(slider);
 
-  TemporizedSlider.$validateOptions = function (options) {
-    if (!options) throw new Error('No options provided');
-    if (!options.data)
-      throw new Error('No data provided');
-  }
+        if (slider.afterPlay) slider.afterPlay();
 
-  TemporizedSlider.$mergeArgs = function (args, default_args) {
-    for(var index in default_args) {
-      if(!args[index])
-        args[index] = default_args[index];
-    }
+        TemporizedSlider.$scheduleNextChange();
+      };
+    },
+    $pause: function(slider) {
+      if (!slider.paused) {
+        if (slider.beforePause) slider.beforePause();
 
-    return args;
-  }
+        slider.pause();
 
-  TemporizedSlider.$play = function(force_play, beforePlay, afterPlay) {
-    if (paused || force_play) {
-      if (beforePlay) beforePlay();
-
-      paused = false;
-      pointer = (pointer + 1 > end) ? 0 : (pointer + 1);
-
-      TemporizedSlider.$changeContent();
-
-      if (afterPlay) afterPlay();
-      // if (args.gallery.load)
-      //   TemporizedSlider.markGalleryItemAsCurrent(pointer);
-
-      TemporizedSlider.$scheduleNextChange();
-    }
-  };
-
-  TemporizedSlider.$pause = function(paused, timeOut, beforePause) {
-    if (!paused) {
-      if (beforePause) beforePause();
-
-      paused = true;
-
-      TemporizedSlider.$clearTimer(timeOut);
-
-      pointer = (pointer - 1 < 0) ? 0 : (pointer - 1);
+        TemporizedSlider.$clearTimer(timeOut);
+      }
     }
   };
+
+  TemporizedSlider.Slider = function(config) {
+    this.controls = config.controls;
+    this.slides = config.slides;
+    this.defaultTime = config.defaultTime;
+    this.gallery = config.gallery;
+
+    this.imageId = config.imageId;
+    this.textId = config.textId;
+    this.titleId = config.titleId;
+
+    this.afterSetup = config.afterSetup;
+
+    this.paused = true;
+
+    this.nextSlide = function() {
+      alert(123);
+    };
+
+    this.pause = function() {
+      this.pause = true
+    }
+  }
 
   TemporizedSlider.$previous = function() {
     pointer = (pointer - 1 >= 0) ? (pointer - 1) : end;
 
     var obj = collection[pointer];
 
-    TemporizedSlider.changeContent(obj);
+    TemporizedSlider.setNextSlide(slider);
 
     if (args.gallery.load)
       TemporizedSlider.markGalleryItemAsCurrent(pointer);
@@ -122,7 +141,7 @@ var TemporizedSlider = {};
   TemporizedSlider.$next = function() {
     pointer = (pointer + 1 <= end) ? (pointer + 1) : 0;
 
-    TemporizedSlider.changeContent();
+    TemporizedSlider.setNextSlide(slider);
 
     if (args.gallery.load)
       TemporizedSlider.markGalleryItemAsCurrent(pointer);
@@ -130,18 +149,17 @@ var TemporizedSlider = {};
     if(!paused) TemporizedSlider.scheduleNextChange();
   };
 
-  TemporizedSlider.$clearTimer = function(timeOut, clearTimeoutFnc) {
-    if (!clearTimeoutFnc) clearTimeoutFnc = clearTimeout;
+  TemporizedSlider.$setNextSlide = function(slider) {
+    nextSlide = slider.nextSlide();
 
-    clearTimeoutFnc(timeOut);
-  };
+    TemporizedSlider.$getElement(slider.imageId).src = nextSlide.image;
+    TemporizedSlider.$getElement(slider.titleId).innerHTML = nextSlide.title;
+    TemporizedSlider.$getElement(slider.textId).innerHTML = nextSlide.text;
 
-  TemporizedSlider.$changeContent = function(obj, targetFields, afterChange) {
-    TemporizedSlider.$getElement(targetFields.image_id).src = obj.image;
-    TemporizedSlider.$getElement(targetFields.title_id).innerHTML = obj.title;
-    TemporizedSlider.$getElement(targetFields.text_id).innerHTML = obj.text;
+    if (slider.gallery.load)
+      TemporizedSlider.$markGalleryItemAsCurrent(slider);
 
-    if (afterChange) afterChange();
+    if (slider.afterChange) slider.afterChange();
   };
 
   TemporizedSlider.$getElement = function(id, DOMHandler) {
@@ -164,44 +182,40 @@ var TemporizedSlider = {};
   }
 
   TemporizedSlider.$loadControls = function(controls) {
-    if (!controls.load)
-      return false;
+    if (!controls.load) return false;
 
     TemporizedSlider.$applyEventFor(
-      controls.ids.play, controls.functions.play
+      controls.ids.play, controls.callbacks.play
     );
 
     TemporizedSlider.$applyEventFor(
-      controls.ids.pause, controls.functions.pause
+      controls.ids.pause, controls.callbacks.pause
     );
 
     TemporizedSlider.$applyEventFor(
-      controls.ids.previous, controls.functions.previous
+      controls.ids.previous, controls.callbacks.previous
     );
 
     TemporizedSlider.$applyEventFor(
-      controls.ids.next, controls.functions.next
+      controls.ids.next, controls.callbacks.next
     );
   };
 
-  TemporizedSlider.$loadGallery = function(args, gallery) {
-    if (!gallery.load)
-      return false;
-
-    var gallery = TemporizedSlider.$getElement(args.gallery.id);
+  TemporizedSlider.$loadGallery = function(gallery, slides) {
+    var galleryElm = TemporizedSlider.$getElement(gallery.id);
     var imgUrl, title, container, galleryImgItem;
-    for(var i in args.data) {
+
+    for(var i in slides) {
       imgUrl = args.data[i].image;
       imgTitle = args.data[i].title;
-      gallery.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '" onclick="TemporizedSlider.GalleryItemClick(this)"/></div>';
+      galleryElm.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '" onclick="TemporizedSlider.GalleryItemClick(this)"/></div>';
       galleryImgs = document.getElementsByClassName("gallery_img");
       galleryImgItem = galleryImgs[galleryImgs.length-1];
     };
   };
 
-  TemporizedSlider.$GalleryItemClick = function(e) {
-    TemporizedSlider.changeContent(e.dataset.index);
-    if(!paused) TemporizedSlider.scheduleNextChange();
+  TemporizedSlider.$galleryItemClick = function(e) {
+    TemporizedSlider.setNextSlide(slider);scheduleNextChange();
     TemporizedSlider.markGalleryItemAsCurrent(e);
   }
 
@@ -229,7 +243,7 @@ var TemporizedSlider = {};
         previous : 'previous_control',
         next : 'next_control'
       },
-      functions : {
+      callbacks : {
         play : function() {
           TemporizedSlider.play();
         },
@@ -249,4 +263,4 @@ var TemporizedSlider = {};
       id : "slider_gallery"
     }
   };
-})()
+})();
