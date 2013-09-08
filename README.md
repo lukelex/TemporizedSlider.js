@@ -9,17 +9,20 @@ A micro js that implements a temporized image slider, with custom text and title
 
 ```javascript
 TemporizedSlider.setupAndStart({
-  slides : [{
-    image : 'https://www.google.com.br/images/srpr/logo3w.png',
-    title : 'my title',
-    text  : 'temporized text',
-    time  : 18
-    },{
-    image : 'http://railsbrasil.s3.amazonaws.com/sites/4e2c66cde8fb0e0001000004/theme/images/rails.png',
-    title : 'my rails title',
-    text  : 'temporized rails text',
-    time  : 15
-  }]
+  slides: [
+    {
+      image: 'https://www.google.com.br/images/srpr/logo3w.png',
+      title: 'my title',
+      text:  'temporized text',
+      time:  18 // time in seconds
+    },
+    {
+      image: 'http://railsbrasil.s3.amazonaws.com/sites/4e2c66cde8fb0e0001000004/theme/images/rails.png',
+      title: 'my rails title',
+      text:  'temporized rails text',
+      time:  15 // time in seconds
+    }
+  ]
 });
 TemporizedSlider.play();      // Initiate or resume the slider
 TemporizedSlider.pause();     // pause the slider
@@ -32,20 +35,20 @@ Optionally, callbacks can be used to trigger custom actions, on pre-determined m
 
 ```javascript
 TemporizedSlider.setup({
-  data : ... ,
-  beforeSetup : function() {
+  slides: ... ,
+  beforeSetup: function() {
     console.warn('initiating');
   },
-  afterSetup : function() {
+  afterSetup: function() {
     console.warn('initiated');
   },
-  afterChange : function() {
+  afterChange: function() {
     console.warn('changed');
   },
-  beforePlay : function() {
+  beforePlay: function() {
     console.warn('playing');
   },
-  beforePause : function() {
+  beforePause: function() {
     console.warn('pausing');
   }
 });
@@ -58,10 +61,10 @@ Those elements can be overwritten through the parameters below:
 
 ```javascript
 TemporizedSlider.setup({
-  slides : ... ,
-  imageId : 'my_custom_image_id',
-  titleId : 'my_custom_title_id',
-  textId : 'my_custom_text_id'
+  slides: ... ,
+  imageId: 'my_custom_image_id',
+  titleId: 'my_custom_title_id',
+  textId:  'my_custom_text_id'
 });
 ```
 
@@ -96,19 +99,25 @@ It's also provided a way to customize the functions that handles Controls events
 
 ```javascript
 TemporizedSlider.setup({
-  data : ... ,
-  controls : {
-    functions : {
-      play : function() {
+  slides: ... ,
+  controls: {
+    play: {
+      handler: function() {
         console.warn('play click');
-      },
-      pause : function() {
+      }
+    },
+    pause: {
+      handler: function() {
         console.warn('pause click');
-      },
-      previous : function() {
+      }
+    },
+    previous: {
+      handler: function() {
         console.warn('previous click');
-      },
-      next : function() {
+      }
+    },
+    next: {
+      handler: function() {
         console.warn('next click');
       }
     }
@@ -121,9 +130,9 @@ Controls is always on except when modified with the following parameter:
 
 ```javascript
 TemporizedSlider.setup({
-  data : ... ,
-  controls : {
-    load : false
+  slides: ... ,
+  controls: {
+    load: false
   }
 });
 ```
@@ -135,10 +144,10 @@ Gallery will show the images passed on data parameters. Although it is not activ
 
 ```javascript
 TemporizedSlider.setup({
-  data : ... ,
-  gallery : {
-    load : true,
-    id : "slider_gallery"
+  slides: ... ,
+  gallery: {
+    load: true,
+    id: 'slider_gallery'
   }
 });
 ```
@@ -165,7 +174,7 @@ If you discover any bugs, feel free to create an issue on GitHub. Please add as 
 https://github.com/lukasalexandre/TemporizedSlider.js/issues
 
 ##License
-Copyright (c) 2012 Lukas Alexandre. http://www.devinscene.com.br/
+Copyright (c) 2012 Lukas Alexandre. http://codelogic.me
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
