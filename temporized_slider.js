@@ -45,10 +45,10 @@ var TemporizedSlider;
       var slider = TemporizedSlider.$slider =
         new TemporizedSlider.Slider(args);
 
-      if (slider.controls && slider.controls.load)
+      if (slider.controls.load)
         TemporizedSlider.$loadControls(slider.controls);
 
-      if (slider.gallery && slider.gallery.load)
+      if (slider.gallery.load)
         TemporizedSlider.$loadGallery(slider.gallery, slider.slides);
 
       timeOut = null;
@@ -76,51 +76,6 @@ var TemporizedSlider;
       if (!clearTimeoutFnc) clearTimeoutFnc = clearTimeout;
 
       clearTimeoutFnc(timeOut);
-    },
-    $play: function(slider) {
-      if (slider.paused) {
-        if (slider.beforePlay) slider.beforePlay();
-
-        slider.unpause();
-
-        TemporizedSlider.$setNextSlide(slider);
-
-        if (slider.afterPlay) slider.afterPlay();
-
-        TemporizedSlider.$scheduleNextChange();
-      };
-    },
-    $pause: function(slider) {
-      if (!slider.paused) {
-        if (slider.beforePause) slider.beforePause();
-
-        slider.pause();
-
-        TemporizedSlider.$clearTimer(timeOut);
-      }
-    },
-    $previous: function() {
-      pointer = (pointer - 1 >= 0) ? (pointer - 1) : end;
-
-      var obj = collection[pointer];
-
-      TemporizedSlider.setNextSlide(slider);
-
-      if (args.gallery.load)
-        TemporizedSlider.markGalleryItemAsCurrent(pointer);
-
-      if(!paused)
-        TemporizedSlider.scheduleNextChange();
-    },
-    $next: function() {
-      pointer = (pointer + 1 <= end) ? (pointer + 1) : 0;
-
-      TemporizedSlider.setNextSlide(slider);
-
-      if (args.gallery.load)
-        TemporizedSlider.markGalleryItemAsCurrent(pointer);
-
-      if(!paused) TemporizedSlider.scheduleNextChange();
     },
     $setNextSlide: function(slider) {
       nextSlide = slider.nextSlide();
@@ -194,6 +149,51 @@ var TemporizedSlider;
       }
       if (typeof elem === 'number') elem = imgs[elem];
       elem.className += ' current';
+    },
+    $play: function(slider) {
+      if (slider.paused) {
+        if (slider.beforePlay) slider.beforePlay();
+
+        slider.unpause();
+
+        TemporizedSlider.$setNextSlide(slider);
+
+        if (slider.afterPlay) slider.afterPlay();
+
+        TemporizedSlider.$scheduleNextChange();
+      };
+    },
+    $pause: function(slider) {
+      if (!slider.paused) {
+        if (slider.beforePause) slider.beforePause();
+
+        slider.pause();
+
+        TemporizedSlider.$clearTimer(timeOut);
+      }
+    },
+    $next: function() {
+      pointer = (pointer + 1 <= end) ? (pointer + 1) : 0;
+
+      TemporizedSlider.setNextSlide(slider);
+
+      if (args.gallery.load)
+        TemporizedSlider.markGalleryItemAsCurrent(pointer);
+
+      if(!paused) TemporizedSlider.scheduleNextChange();
+    },
+    $previous: function() {
+      pointer = (pointer - 1 >= 0) ? (pointer - 1) : end;
+
+      var obj = collection[pointer];
+
+      TemporizedSlider.setNextSlide(slider);
+
+      if (args.gallery.load)
+        TemporizedSlider.markGalleryItemAsCurrent(pointer);
+
+      if(!paused)
+        TemporizedSlider.scheduleNextChange();
     },
     defaultArgs: {
       default_time : 0,

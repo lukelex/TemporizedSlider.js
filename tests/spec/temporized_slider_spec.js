@@ -30,6 +30,63 @@ describe('TemporizedSlider', function () {
     subject = TemporizedSlider;
   });
 
+  describe('.setupAndStart', function () {
+    beforeEach(function () {
+      spyOn(subject, 'setup').andReturn(subject);
+      spyOn(subject, '$play');
+
+      subject.setupAndStart();
+    });
+
+    it('should call setup method', function () {
+      expect(subject.setup).toHaveBeenCalled();
+    });
+
+    it('should call play method', function () {
+      expect(subject.$play).toHaveBeenCalled();
+    });
+  });
+
+  describe('.play', function () {
+    it('should forward to $play', function () {
+      spyOn(subject, '$play');
+
+      subject.play();
+
+      expect(subject.$play).toHaveBeenCalled();
+    });
+  });
+
+  describe('.pause', function () {
+    it('should forward to $pause', function () {
+      spyOn(subject, '$pause');
+
+      subject.pause();
+
+      expect(subject.$pause).toHaveBeenCalled();
+    });
+  });
+
+  describe('.next', function () {
+    it('should forward to $next', function () {
+      spyOn(subject, '$next');
+
+      subject.next();
+
+      expect(subject.$next).toHaveBeenCalled();
+    });
+  });
+
+  describe('.previous', function () {
+    it('should forward to $previous', function () {
+      spyOn(subject, '$previous');
+
+      subject.previous();
+
+      expect(subject.$previous).toHaveBeenCalled();
+    });
+  });
+
   describe('.setup', function () {
     beforeEach(function() {
       spyOn(subject, '$validateOptions');
@@ -80,23 +137,6 @@ describe('TemporizedSlider', function () {
     });
   });
 
-  describe('.setupAndStart', function () {
-    beforeEach(function () {
-      spyOn(subject, 'setup').andReturn(subject);
-      spyOn(subject, '$play');
-
-      subject.setupAndStart();
-    });
-
-    it('should call setup method', function () {
-      expect(subject.setup).toHaveBeenCalled();
-    });
-
-    it('should call play method', function () {
-      expect(subject.$play).toHaveBeenCalled();
-    });
-  });
-
   describe('.$validateOptions', function() {
     it('should throw an exception if no options is provided', function () {
       expect(function () {
@@ -135,6 +175,16 @@ describe('TemporizedSlider', function () {
     });
   });
 
+  describe('.$clearTimer', function () {
+    it('should clear the timer countdown', function () {
+      clearFnc = jasmine.createSpy('clearTimeout');
+
+      subject.$clearTimer(timeOut, clearFnc);
+
+      expect(clearFnc).toHaveBeenCalledWith(timeOut);
+    });
+  });
+
   describe('.$setNextSlide', function () {
     beforeEach(function () {
       slider = {
@@ -162,6 +212,13 @@ describe('TemporizedSlider', function () {
       expect(subject.$getElement.calls.length).toEqual(3);
     });
 
+    it('should call the .$markGalleryItemAsCurrent', function() {
+      subject.$setNextSlide(slider);
+
+      expect(subject.$markGalleryItemAsCurrent).
+        toHaveBeenCalledWith(slider);
+    });
+
     it('should trigger the afterChange callback', function () {
       slider.afterChange = jasmine.createSpy('callback');
 
@@ -175,19 +232,11 @@ describe('TemporizedSlider', function () {
     it('should forward to getElementById', function() {
       DOMHandler = selectorDouble();
 
-      subject.$getElement('some-id', DOMHandler);
+      elmId = 'some-id';
 
-      expect(DOMHandler.getElementById).toHaveBeenCalled();
-    });
-  });
+      subject.$getElement(elmId, DOMHandler);
 
-  describe('.$loadControls', function () {
-    it('should not load the controls if not requested', function () {
-      spyOn(subject, '$applyEventFor');
-
-      subject.$loadControls({load: false});
-
-      expect(subject.$applyEventFor).not.toHaveBeenCalled();
+      expect(DOMHandler.getElementById).toHaveBeenCalledWith(elmId);
     });
   });
 
@@ -203,13 +252,45 @@ describe('TemporizedSlider', function () {
     });
   });
 
-  describe('.$clearTimer', function () {
-    it('should clear the timer countdown', function () {
-      clearFnc = jasmine.createSpy('clearTimeout');
+  describe('.$loadControls', function () {
+    it('should not load the controls if not requested', function () {
+      spyOn(subject, '$applyEventFor');
 
-      subject.$clearTimer(timeOut, clearFnc);
+      subject.$loadControls({load: false});
 
-      expect(clearFnc).toHaveBeenCalledWith(timeOut);
+      expect(subject.$applyEventFor).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('.$play', function() {
+    beforeEach(function() {
+      spyOn(subject, '$setNextSlide');
+      spyOn(subject, '$scheduleNextChange');
+      spyOn(subject, '$markGalleryItemAsCurrent');
+    });
+
+    it('should trigger the beforePlay callback', function() {
+      var slider = {
+        beforePlay: jasmine.createSpy('beforePlay'),
+        paused: true,
+        unpause: jasmine.createSpy('unpause'),
+      };
+
+      subject.$play(slider);
+
+      expect(slider.beforePlay).toHaveBeenCalled();
+    });
+
+    it('should trigger the afterPlay callback', function() {
+      var slider = {
+        afterPlay: jasmine.createSpy('afterPlay'),
+        paused: true,
+        unpause: jasmine.createSpy('unpause'),
+      };
+
+      subject.$play(slider);
+
+      expect(slider.afterPlay).toHaveBeenCalled();
     });
   });
 
@@ -248,78 +329,6 @@ describe('TemporizedSlider', function () {
       subject.$pause(slider);
 
       expect(clearFnc).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('.play', function () {
-    it('should forward to $play', function () {
-      spyOn(subject, '$play');
-
-      subject.play();
-
-      expect(subject.$play).toHaveBeenCalled();
-    });
-  });
-
-  describe('.pause', function () {
-    it('should forward to $pause', function () {
-      spyOn(subject, '$pause');
-
-      subject.pause();
-
-      expect(subject.$pause).toHaveBeenCalled();
-    });
-  });
-
-  describe('.next', function () {
-    it('should forward to $next', function () {
-      spyOn(subject, '$next');
-
-      subject.next();
-
-      expect(subject.$next).toHaveBeenCalled();
-    });
-  });
-
-  describe('.previous', function () {
-    it('should forward to $previous', function () {
-      spyOn(subject, '$previous');
-
-      subject.previous();
-
-      expect(subject.$previous).toHaveBeenCalled();
-    });
-  });
-
-  describe('.$play', function() {
-    beforeEach(function() {
-      spyOn(subject, '$setNextSlide');
-      spyOn(subject, '$scheduleNextChange');
-      spyOn(subject, '$markGalleryItemAsCurrent');
-    });
-
-    it('should trigger the beforePlay callback', function() {
-      var slider = {
-        beforePlay: jasmine.createSpy('beforePlay'),
-        paused: true,
-        unpause: jasmine.createSpy('unpause'),
-      };
-
-      subject.$play(slider);
-
-      expect(slider.beforePlay).toHaveBeenCalled();
-    });
-
-    it('should trigger the afterPlay callback', function() {
-      var slider = {
-        afterPlay: jasmine.createSpy('afterPlay'),
-        paused: true,
-        unpause: jasmine.createSpy('unpause'),
-      };
-
-      subject.$play(slider);
-
-      expect(slider.afterPlay).toHaveBeenCalled();
     });
   });
 });
