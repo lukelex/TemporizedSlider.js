@@ -197,9 +197,9 @@ var TemporizedSlider;
     },
     defaultArgs: {
       default_time : 0,
-      image_id : 'slider_image',
-      title_id : 'slider_title',
-      text_id : 'slider_text',
+      imageId : 'slider_image',
+      titleId : 'slider_title',
+      textId : 'slider_text',
       controls : {
         load : true,
         ids : {
