@@ -1,5 +1,7 @@
 #TemporizedSlider.js
 
+[![Build Status](https://travis-ci.org/lukelex/TemporizedSlider.js.png?branch=master)](https://travis-ci.org/lukelex/TemporizedSlider.js)
+
 A micro js that implements a temporized image slider, with custom text and title. It leaves room for others personalized changes.
 
 ##Usage
