@@ -105,24 +105,18 @@ var TemporizedSlider;
         return htmlElm;
       }
     },
-    $loadControls: function(controls) {
-      if (!controls.load) return false;
+    $loadControls: function(slider) {
+      if (!slider.controls.load) return slider;
 
-      TemporizedSlider.$applyEventFor(
-        controls.ids.play, controls.callbacks.play
-      );
+      TemporizedSlider.$applyEventFor(slider.controls.play);
 
-      TemporizedSlider.$applyEventFor(
-        controls.ids.pause, controls.callbacks.pause
-      );
+      TemporizedSlider.$applyEventFor(slider.controls.pause);
 
-      TemporizedSlider.$applyEventFor(
-        controls.ids.previous, controls.callbacks.previous
-      );
+      TemporizedSlider.$applyEventFor(slider.controls.previous);
 
-      TemporizedSlider.$applyEventFor(
-        controls.ids.next, controls.callbacks.next
-      );
+      TemporizedSlider.$applyEventFor(slider.controls.next);
+
+      return slider;
     },
     $loadGallery: function(gallery, slides) {
       var galleryElm = TemporizedSlider.$getElement(gallery.id);

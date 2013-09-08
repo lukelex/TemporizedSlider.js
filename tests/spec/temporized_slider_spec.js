@@ -256,9 +256,102 @@ describe('TemporizedSlider', function () {
     it('should not load the controls if not requested', function () {
       spyOn(subject, '$applyEventFor');
 
-      subject.$loadControls({load: false});
+      slider = {
+        controls: {
+          load: false
+        }
+      };
+
+      subject.$loadControls(slider);
 
       expect(subject.$applyEventFor).not.toHaveBeenCalled();
+    });
+
+    it('should return slider instance when done', function() {
+      spyOn(subject, '$applyEventFor');
+
+      slider = {
+        controls: {
+          load: true
+        }
+      };
+
+      expect(subject.$loadControls(slider)).
+        toEqual(slider);
+    });
+
+    it('should return slider instance even when not loading controls', function() {
+      spyOn(subject, '$applyEventFor');
+
+      slider = {
+        controls: {
+          load: false
+        }
+      };
+
+      expect(subject.$loadControls(slider)).
+        toEqual(slider);
+    });
+
+    var slider;
+    beforeEach(function() {
+      slider = {
+        controls: {
+          load: true,
+          play: {
+            id: 'playId',
+            event: function() {}
+          },
+          pause: {
+            id: 'pauseId',
+            event: function() {}
+          },
+          next: {
+            id: 'nextId',
+            event: function() {}
+          },
+          previous: {
+            id: 'previousId',
+            event: function() {}
+          }
+        }
+      };
+    });
+
+    it('should call .$applyEventFor with play config', function () {
+      spyOn(subject, '$applyEventFor');
+
+      subject.$loadControls(slider);
+
+      expect(subject.$applyEventFor).
+        toHaveBeenCalledWith(slider.controls.play);
+    });
+
+    it('should call .$applyEventFor with pause config', function () {
+      spyOn(subject, '$applyEventFor');
+
+      subject.$loadControls(slider);
+
+      expect(subject.$applyEventFor).
+        toHaveBeenCalledWith(slider.controls.pause);
+    });
+
+    it('should call .$applyEventFor with next config', function () {
+      spyOn(subject, '$applyEventFor');
+
+      subject.$loadControls(slider);
+
+      expect(subject.$applyEventFor).
+        toHaveBeenCalledWith(slider.controls.next);
+    });
+
+    it('should call .$applyEventFor with previous config', function () {
+      spyOn(subject, '$applyEventFor');
+
+      subject.$loadControls(slider);
+
+      expect(subject.$applyEventFor).
+        toHaveBeenCalledWith(slider.controls.previous);
     });
   });
 
