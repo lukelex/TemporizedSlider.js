@@ -98,169 +98,194 @@ var TemporizedSlider;
 
         TemporizedSlider.$clearTimer(timeOut);
       }
+    },
+    $previous: function() {
+      pointer = (pointer - 1 >= 0) ? (pointer - 1) : end;
+
+      var obj = collection[pointer];
+
+      TemporizedSlider.setNextSlide(slider);
+
+      if (args.gallery.load)
+        TemporizedSlider.markGalleryItemAsCurrent(pointer);
+
+      if(!paused)
+        TemporizedSlider.scheduleNextChange();
+    },
+    $next: function() {
+      pointer = (pointer + 1 <= end) ? (pointer + 1) : 0;
+
+      TemporizedSlider.setNextSlide(slider);
+
+      if (args.gallery.load)
+        TemporizedSlider.markGalleryItemAsCurrent(pointer);
+
+      if(!paused) TemporizedSlider.scheduleNextChange();
+    },
+    $setNextSlide: function(slider) {
+      nextSlide = slider.nextSlide();
+
+      TemporizedSlider.$getElement(slider.imageId).src = nextSlide.image;
+      TemporizedSlider.$getElement(slider.titleId).innerHTML = nextSlide.title;
+      TemporizedSlider.$getElement(slider.textId).innerHTML = nextSlide.text;
+
+      if (slider.gallery.load)
+        TemporizedSlider.$markGalleryItemAsCurrent(slider);
+
+      if (slider.afterChange) slider.afterChange();
+    },
+    $getElement: function(id, DOMHandler) {
+      if (!DOMHandler) DOMHandler = document;
+
+      return DOMHandler.getElementById(id);
+    },
+    $scheduleNextChange: function() {
+      clearTimeout(timeOut);
+      timeOut = setTimeout('TemporizedSlider.play(true)', collection[pointer].time * 1000);
+    },
+    $applyEventFor: function (id, event) {
+      var htmlElm = TemporizedSlider.$getElement(id);
+      if (htmlElm) {
+        htmlElm.onclick = event;
+        return htmlElm;
+      }
+    },
+    $loadControls: function(controls) {
+      if (!controls.load) return false;
+
+      TemporizedSlider.$applyEventFor(
+        controls.ids.play, controls.callbacks.play
+      );
+
+      TemporizedSlider.$applyEventFor(
+        controls.ids.pause, controls.callbacks.pause
+      );
+
+      TemporizedSlider.$applyEventFor(
+        controls.ids.previous, controls.callbacks.previous
+      );
+
+      TemporizedSlider.$applyEventFor(
+        controls.ids.next, controls.callbacks.next
+      );
+    },
+    $loadGallery: function(gallery, slides) {
+      var galleryElm = TemporizedSlider.$getElement(gallery.id);
+      var imgUrl, title, container, galleryImgItem;
+
+      for(var i in slides) {
+        imgUrl = args.data[i].image;
+        imgTitle = args.data[i].title;
+        galleryElm.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '" onclick="TemporizedSlider.GalleryItemClick(this)"/></div>';
+        galleryImgs = document.getElementsByClassName("gallery_img");
+        galleryImgItem = galleryImgs[galleryImgs.length-1];
+      };
+    },
+    $galleryItemClick: function(e) {
+      TemporizedSlider.setNextSlide(slider);scheduleNextChange();
+      TemporizedSlider.markGalleryItemAsCurrent(e);
+    },
+    $markGalleryItemAsCurrent: function(elem) {
+      var imgs = document.getElementsByClassName('gallery_img');
+      for(var i in imgs) {
+        if (typeof imgs[i] === "object") {
+          imgs[i].className = imgs[i].className.replace(' current', '');
+        }
+      }
+      if (typeof elem === 'number') elem = imgs[elem];
+      elem.className += ' current';
+    },
+    defaultArgs: {
+      default_time : 0,
+      image_id : 'slider_image',
+      title_id : 'slider_title',
+      text_id : 'slider_text',
+      controls : {
+        load : true,
+        ids : {
+          play : 'play_control',
+          pause : 'pause_control',
+          previous : 'previous_control',
+          next : 'next_control'
+        },
+        callbacks : {
+          play : function() {
+            TemporizedSlider.play();
+          },
+          pause : function() {
+            TemporizedSlider.pause();
+          },
+          previous : function() {
+            TemporizedSlider.previous();
+          },
+          next : function() {
+            TemporizedSlider.next();
+          }
+        }
+      },
+      gallery : {
+        load : true,
+        id : 'slider_gallery'
+      }
     }
   };
 
   TemporizedSlider.Slider = function(config) {
-    this.controls = config.controls;
-    this.slides = config.slides;
-    this.defaultTime = config.defaultTime;
-    this.gallery = config.gallery;
+    var self = this;
 
-    this.imageId = config.imageId;
-    this.textId = config.textId;
-    this.titleId = config.titleId;
+    self.controls = config.controls;
+    self.defaultTime = config.defaultTime;
+    self.gallery = config.gallery;
 
-    this.afterSetup = config.afterSetup;
+    self.slides = []
 
-    this.paused = true;
-
-    this.nextSlide = function() {
-      alert(123);
+    for (var i = 0; i < config.slides.length; i++) {
+      self.slides.push(
+        new TemporizedSlider.Slide(
+          config.slides[i],
+          self.slides[i-1]
+        )
+      );
     };
 
-    this.pause = function() {
-      this.pause = true
-    }
-  }
+    self.imageId = config.imageId;
+    self.textId = config.textId;
+    self.titleId = config.titleId;
 
-  TemporizedSlider.$previous = function() {
-    pointer = (pointer - 1 >= 0) ? (pointer - 1) : end;
+    self.afterSetup = config.afterSetup;
 
-    var obj = collection[pointer];
+    self.paused = true;
 
-    TemporizedSlider.setNextSlide(slider);
+    self.currentSlide = function() {
+      if (self.current) return self.current;
 
-    if (args.gallery.load)
-      TemporizedSlider.markGalleryItemAsCurrent(pointer);
-
-    if(!paused)
-      TemporizedSlider.scheduleNextChange();
-  };
-
-  TemporizedSlider.$next = function() {
-    pointer = (pointer + 1 <= end) ? (pointer + 1) : 0;
-
-    TemporizedSlider.setNextSlide(slider);
-
-    if (args.gallery.load)
-      TemporizedSlider.markGalleryItemAsCurrent(pointer);
-
-    if(!paused) TemporizedSlider.scheduleNextChange();
-  };
-
-  TemporizedSlider.$setNextSlide = function(slider) {
-    nextSlide = slider.nextSlide();
-
-    TemporizedSlider.$getElement(slider.imageId).src = nextSlide.image;
-    TemporizedSlider.$getElement(slider.titleId).innerHTML = nextSlide.title;
-    TemporizedSlider.$getElement(slider.textId).innerHTML = nextSlide.text;
-
-    if (slider.gallery.load)
-      TemporizedSlider.$markGalleryItemAsCurrent(slider);
-
-    if (slider.afterChange) slider.afterChange();
-  };
-
-  TemporizedSlider.$getElement = function(id, DOMHandler) {
-    if (!DOMHandler) DOMHandler = document;
-
-    return DOMHandler.getElementById(id);
-  };
-
-  TemporizedSlider.$scheduleNextChange = function() {
-    clearTimeout(timeOut);
-    timeOut = setTimeout('TemporizedSlider.play(true)', collection[pointer].time * 1000);
-  };
-
-  TemporizedSlider.$applyEventFor = function (id, event) {
-    var htmlElm = TemporizedSlider.$getElement(id);
-    if (htmlElm) {
-      htmlElm.onclick = event;
-      return htmlElm;
-    }
-  }
-
-  TemporizedSlider.$loadControls = function(controls) {
-    if (!controls.load) return false;
-
-    TemporizedSlider.$applyEventFor(
-      controls.ids.play, controls.callbacks.play
-    );
-
-    TemporizedSlider.$applyEventFor(
-      controls.ids.pause, controls.callbacks.pause
-    );
-
-    TemporizedSlider.$applyEventFor(
-      controls.ids.previous, controls.callbacks.previous
-    );
-
-    TemporizedSlider.$applyEventFor(
-      controls.ids.next, controls.callbacks.next
-    );
-  };
-
-  TemporizedSlider.$loadGallery = function(gallery, slides) {
-    var galleryElm = TemporizedSlider.$getElement(gallery.id);
-    var imgUrl, title, container, galleryImgItem;
-
-    for(var i in slides) {
-      imgUrl = args.data[i].image;
-      imgTitle = args.data[i].title;
-      galleryElm.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '" onclick="TemporizedSlider.GalleryItemClick(this)"/></div>';
-      galleryImgs = document.getElementsByClassName("gallery_img");
-      galleryImgItem = galleryImgs[galleryImgs.length-1];
+      return {
+        $next: self.slides[0]
+      }
     };
-  };
 
-  TemporizedSlider.$galleryItemClick = function(e) {
-    TemporizedSlider.setNextSlide(slider);scheduleNextChange();
-    TemporizedSlider.markGalleryItemAsCurrent(e);
+    self.nextSlide = function() {
+      return self.current = self.currentSlide().$next;
+    };
+
+    self.pause = function() {
+      self.pause = true;
+    };
+
+    self.unpause = function() {
+      self.pause = false;
+    }
   }
 
-  TemporizedSlider.$markGalleryItemAsCurrent = function(elem) {
-    var imgs = document.getElementsByClassName('gallery_img');
-    for(var i in imgs) {
-      if (typeof imgs[i] === "object") {
-        imgs[i].className = imgs[i].className.replace(' current', '');
-      }
-    }
-    if (typeof elem === 'number') elem = imgs[elem];
-    elem.className += ' current';
-  };
+  TemporizedSlider.Slide = function(obj, previousSlide) {
+    var self = this;
 
-  TemporizedSlider.defaultArgs = {
-    default_time : 0,
-    image_id : 'slider_image',
-    title_id : 'slider_title',
-    text_id : 'slider_text',
-    controls : {
-      load : true,
-      ids : {
-        play : 'play_control',
-        pause : 'pause_control',
-        previous : 'previous_control',
-        next : 'next_control'
-      },
-      callbacks : {
-        play : function() {
-          TemporizedSlider.play();
-        },
-        pause : function() {
-          TemporizedSlider.pause();
-        },
-        previous : function() {
-          TemporizedSlider.previous();
-        },
-        next : function() {
-          TemporizedSlider.next();
-        }
-      }
-    },
-    gallery : {
-      load : true,
-      id : "slider_gallery"
-    }
-  };
+    self.image = obj.image;
+    self.text = obj.text;
+    self.time = obj.time;
+    self.title = obj.title;
+
+    self.$previous = previousSlide;
+    if (self.$previous) self.$previous.$next = self;
+  }
 })();
