@@ -98,10 +98,10 @@ var TemporizedSlider;
       clearTimeout(timeOut);
       timeOut = setTimeout('TemporizedSlider.play(true)', collection[pointer].time * 1000);
     },
-    $applyEventFor: function (id, event) {
-      var htmlElm = TemporizedSlider.$getElement(id);
+    $applyEventFor: function (control) {
+      var htmlElm = TemporizedSlider.$getElement(control.id);
       if (htmlElm) {
-        htmlElm.onclick = event;
+        htmlElm.onclick = control.handler;
         return htmlElm;
       }
     },
@@ -190,36 +190,40 @@ var TemporizedSlider;
         TemporizedSlider.scheduleNextChange();
     },
     defaultArgs: {
-      default_time : 0,
-      imageId : 'slider_image',
-      titleId : 'slider_title',
-      textId : 'slider_text',
-      controls : {
-        load : true,
-        ids : {
-          play : 'play_control',
-          pause : 'pause_control',
-          previous : 'previous_control',
-          next : 'next_control'
+      default_time: 0,
+      imageId: 'slider_image',
+      titleId: 'slider_title',
+      textId: 'slider_text',
+      controls: {
+        load: true,
+        play: {
+          id: 'play_control',
+          handler: function() {
+            TemporizedSlider.play
+          }
         },
-        callbacks : {
-          play : function() {
-            TemporizedSlider.play();
-          },
-          pause : function() {
+        pause: {
+          id: 'pause_control',
+          handler: function() {
             TemporizedSlider.pause();
-          },
-          previous : function() {
-            TemporizedSlider.previous();
-          },
-          next : function() {
+          }
+        },
+        next: {
+          id: 'next_control',
+          handler: function() {
             TemporizedSlider.next();
+          }
+        },
+        previous: {
+          id: 'previous_control',
+          handler: function() {
+            TemporizedSlider.previous();
           }
         }
       },
       gallery : {
-        load : true,
-        id : 'slider_gallery'
+        load: true,
+        id: 'slider_gallery'
       }
     }
   };
@@ -269,7 +273,7 @@ var TemporizedSlider;
     self.unpause = function() {
       self.pause = false;
     }
-  }
+  };
 
   TemporizedSlider.Slide = function(obj, previousSlide) {
     var self = this;
@@ -281,5 +285,5 @@ var TemporizedSlider;
 
     self.$previous = previousSlide;
     if (self.$previous) self.$previous.$next = self;
-  }
+  };
 })();

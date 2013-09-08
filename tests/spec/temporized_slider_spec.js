@@ -246,7 +246,12 @@ describe('TemporizedSlider', function () {
 
       spyOn(subject, '$getElement').andReturn(mockElm);
 
-      result = subject.$applyEventFor('myElm', function(){});
+      control = {
+        id: 'elmId',
+        handler: function() {}
+      }
+
+      result = subject.$applyEventFor(control);
 
       expect(result).not.toBeUndefined();
     });
@@ -300,19 +305,19 @@ describe('TemporizedSlider', function () {
           load: true,
           play: {
             id: 'playId',
-            event: function() {}
+            handler: function() {}
           },
           pause: {
             id: 'pauseId',
-            event: function() {}
+            handler: function() {}
           },
           next: {
             id: 'nextId',
-            event: function() {}
+            handler: function() {}
           },
           previous: {
             id: 'previousId',
-            event: function() {}
+            handler: function() {}
           }
         }
       };
