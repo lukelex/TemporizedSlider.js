@@ -3,4 +3,4 @@ language: node_js
 before_script:
   - npm install -g grunt grunt-cli
 
-script: grunt test --verbose
+script: grunt test
