@@ -333,7 +333,7 @@ describe('Slider', function() {
   describe('#nextSlide', function() {
     it('should return the first slide when none is the current', function() {
       config = {
-        slides: [{title: 'sample'}, {title: 'sample2'}]
+        slides: [1,2]
       }
 
       slider = new script.Slider(config);
@@ -343,7 +343,7 @@ describe('Slider', function() {
       expect(slider.nextSlide()).toEqual(expectedSlide);
     });
 
-    xit('should set the first slide as active', function() {
+    it('should set the first slide as active', function() {
       config = {
         slides: [1,2]
       }
