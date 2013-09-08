@@ -8,8 +8,8 @@ A micro js that implements a temporized image slider, with custom text and title
 ###Basics
 
 ```javascript
-TemporizedSlider.setup({
-  data : [{
+TemporizedSlider.setupAndStart({
+  slides : [{
     image : 'https://www.google.com.br/images/srpr/logo3w.png',
     title : 'my title',
     text  : 'temporized text',
@@ -21,8 +21,8 @@ TemporizedSlider.setup({
     time  : 15
   }]
 });
-TemporizedSlider.pause();     // pause the slider
 TemporizedSlider.play();      // Initiate or resume the slider
+TemporizedSlider.pause();     // pause the slider
 TemporizedSlider.next();      // go to next slide
 TemporizedSlider.previous();  // go to previous slide
 ```
@@ -58,10 +58,10 @@ Those elements can be overwritten through the parameters below:
 
 ```javascript
 TemporizedSlider.setup({
-  data : ... ,
-  image_id : 'my_custom_image_id',
-  title_id : 'my_custom_title_id',
-  text_id : 'my_custom_text_id'
+  slides : ... ,
+  imageId : 'my_custom_image_id',
+  titleId : 'my_custom_title_id',
+  textId : 'my_custom_text_id'
 });
 ```
 
@@ -73,13 +73,19 @@ Controls will assign its default actions by searching for four core elements tha
 
 ```javascript
 TemporizedSlider.setup({
-  data : ... ,
+  slides: ... ,
   controls : {
-    ids : {
-      play : 'custom_play_id',
-      pause : 'custom_pause_id',
-      previous : 'custom_previous_id',
-      next : 'custom_next_id'
+    play: {
+      id: 'custom_play_id'
+    },
+    pause: {
+      id: 'custom_pause_id'
+    },
+    previous: {
+      id: 'custom_previous_id'
+    },
+    next: {
+      id: 'custom_next_id'
     }
   }
 });
