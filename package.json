@@ -1,0 +1,12 @@
+{
+  "name": "temporized_slider",
+  "version": "2.1.1",
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-jasmine": "~0.5.1"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.8"
+  }
+}
