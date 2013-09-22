@@ -317,7 +317,12 @@ describe('DOM', function() {
     subject = TemporizedSlider.DOM;
 
     documentDouble = jasmine.createSpyObj(
-      'documentDouble', ['getElementById', 'getElementsWithClass']
+      'documentDouble',
+      [
+        'getElementById',
+        'getElementsWithClass',
+        'getElementsByClassName'
+      ]
     );
   });
 
@@ -332,13 +337,24 @@ describe('DOM', function() {
     });
   });
 
-  describe('#$getElementById', function () {
-    it('should forward to getElementById', function() {
+  describe('#$getElementsByClassName', function () {
+    it('should forward to getElementsByClassName', function() {
       elmClass = 'some-class';
 
-      subject.$getElementById(elmId, documentDouble);
+      subject.$getElementsByClassName(elmId, documentDouble);
 
-      expect(documentDouble.getElementById).
+      expect(documentDouble.getElementsByClassName).
+        toHaveBeenCalledWith(elmId);
+    });
+  });
+
+  describe('#$getElementsWithClass', function () {
+    it('should forward to getElementsWithClass', function() {
+      elmClass = 'some-class';
+
+      subject.$getElementsWithClass(elmId, documentDouble);
+
+      expect(documentDouble.getElementsWithClass).
         toHaveBeenCalledWith(elmId);
     });
   });
