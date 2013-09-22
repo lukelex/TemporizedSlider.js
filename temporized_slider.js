@@ -13,19 +13,19 @@ var TemporizedSlider;
   TemporizedSlider = {
     // public facing methods
     setupAndStart: function(options) {
-      TemporizedSlider.setup(options).$play(TemporizedSlider.$slider);
+      TemporizedSlider.setup(options).play(TemporizedSlider.$slider);
     },
-    play: function() {
-      TemporizedSlider.$play(TemporizedSlider.$slider);
+    play: function(slider) {
+      (slider || TemporizedSlider.$slider).play();
     },
-    pause: function() {
-      TemporizedSlider.$pause(TemporizedSlider.$slider);
+    pause: function(slider) {
+      (slider || TemporizedSlider.$slider).pause();
     },
-    next: function() {
-      TemporizedSlider.$next(TemporizedSlider.$slider);
+    next: function(slider) {
+      (slider || TemporizedSlider.$slider).next();
     },
-    previous: function() {
-      TemporizedSlider.$previous(TemporizedSlider.$slider);
+    previous: function(slider) {
+      (slider || TemporizedSlider.$slider).previous();
     },
     setup: function(options) {
       TemporizedSlider.$validateOptions(options);
@@ -46,10 +46,10 @@ var TemporizedSlider;
         new TemporizedSlider.Slider(args);
 
       if (slider.controls.load)
-        TemporizedSlider.$loadControls(slider.controls);
+        TemporizedSlider.$loadControls(slider);
 
       if (slider.gallery.load)
-        TemporizedSlider.$loadGallery(slider.gallery, slider.slides);
+        TemporizedSlider.$loadGallery(slider);
 
       timeOut = null;
 
@@ -72,31 +72,10 @@ var TemporizedSlider;
 
       return args;
     },
-    $clearTimer: function(timeOut, clearTimeoutFnc) {
-      if (!clearTimeoutFnc) clearTimeoutFnc = clearTimeout;
-
-      clearTimeoutFnc(timeOut);
-    },
-    $setNextSlide: function(slider) {
-      nextSlide = slider.nextSlide();
-
-      TemporizedSlider.$getElement(slider.imageId).src = nextSlide.image;
-      TemporizedSlider.$getElement(slider.titleId).innerHTML = nextSlide.title;
-      TemporizedSlider.$getElement(slider.textId).innerHTML = nextSlide.text;
-
-      if (slider.gallery.load)
-        TemporizedSlider.$markGalleryItemAsCurrent(slider);
-
-      if (slider.afterChange) slider.afterChange();
-    },
     $getElement: function(id, DOMHandler) {
       if (!DOMHandler) DOMHandler = document;
 
       return DOMHandler.getElementById(id);
-    },
-    $scheduleNextChange: function() {
-      clearTimeout(timeOut);
-      timeOut = setTimeout('TemporizedSlider.play(true)', collection[pointer].time * 1000);
     },
     $applyEventFor: function (control) {
       var htmlElm = TemporizedSlider.$getElement(control.id);
@@ -118,76 +97,29 @@ var TemporizedSlider;
 
       return slider;
     },
-    $loadGallery: function(gallery, slides) {
-      var galleryElm = TemporizedSlider.$getElement(gallery.id);
+    $loadGallery: function(slider, DOMHandler) {
+      if (!DOMHandler) DOMHandler = document;
+
       var imgUrl, title, container, galleryImgItem;
+      var galleryElm = TemporizedSlider.$getElement(slider.gallery.id);
+
+      var slides = slider.slides;
 
       for(var i in slides) {
-        imgUrl = args.data[i].image;
-        imgTitle = args.data[i].title;
+        imgUrl = slides[i].image;
+        imgTitle = slides[i].title;
         galleryElm.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '" onclick="TemporizedSlider.GalleryItemClick(this)"/></div>';
-        galleryImgs = document.getElementsByClassName("gallery_img");
+        galleryImgs = DOMHandler.getElementsByClassName("gallery_img");
         galleryImgItem = galleryImgs[galleryImgs.length-1];
       };
     },
-    $galleryItemClick: function(e) {
-      TemporizedSlider.setNextSlide(slider);scheduleNextChange();
-      TemporizedSlider.markGalleryItemAsCurrent(e);
-    },
-    $markGalleryItemAsCurrent: function(elem) {
-      var imgs = document.getElementsByClassName('gallery_img');
-      for(var i in imgs) {
-        if (typeof imgs[i] === "object") {
-          imgs[i].className = imgs[i].className.replace(' current', '');
-        }
-      }
-      if (typeof elem === 'number') elem = imgs[elem];
-      elem.className += ' current';
-    },
-    $play: function(slider) {
-      if (slider.paused) {
-        if (slider.beforePlay) slider.beforePlay();
+    $galleryItemClick: function(e, slider) {
+      if (!slider) slider = TemporizedSlider.$slider;
 
-        slider.unpause();
+      slider.$changeSlide();
+      slider.$markGalleryItemAsCurrent(e);
 
-        TemporizedSlider.$setNextSlide(slider);
-
-        if (slider.afterPlay) slider.afterPlay();
-
-        TemporizedSlider.$scheduleNextChange();
-      };
-    },
-    $pause: function(slider) {
-      if (!slider.paused) {
-        if (slider.beforePause) slider.beforePause();
-
-        slider.pause();
-
-        TemporizedSlider.$clearTimer(timeOut);
-      }
-    },
-    $next: function() {
-      pointer = (pointer + 1 <= end) ? (pointer + 1) : 0;
-
-      TemporizedSlider.setNextSlide(slider);
-
-      if (args.gallery.load)
-        TemporizedSlider.markGalleryItemAsCurrent(pointer);
-
-      if(!paused) TemporizedSlider.scheduleNextChange();
-    },
-    $previous: function() {
-      pointer = (pointer - 1 >= 0) ? (pointer - 1) : end;
-
-      var obj = collection[pointer];
-
-      TemporizedSlider.setNextSlide(slider);
-
-      if (args.gallery.load)
-        TemporizedSlider.markGalleryItemAsCurrent(pointer);
-
-      if(!paused)
-        TemporizedSlider.scheduleNextChange();
+      slider.pause();
     },
     defaultArgs: {
       default_time: 0,
@@ -267,12 +199,82 @@ var TemporizedSlider;
     };
 
     self.pause = function() {
-      self.pause = true;
+      if (!self.paused) {
+        if (self.beforePause) self.beforePause();
+
+        self.paused = true;
+      };
+
+      self.$clearTimer(timeOut);
     };
 
-    self.unpause = function() {
-      self.pause = false;
-    }
+    self.play = function() {
+      if (self.paused) {
+        if (self.beforePlay) self.beforePlay();
+
+        self.paused = false;
+
+        if (self.afterPlay) self.afterPlay();
+      };
+    };
+
+    self.$next = function() {
+      self.changeSlide(self.nextSlide());
+
+      if (args.gallery.load)
+        self.markGalleryItemAsCurrent(self.currentSlide());
+
+      if(!self.paused)
+        self.$scheduleNextChange();
+    };
+
+    self.$previous = function() {
+      self.changeSlide(self.previousSlide());
+
+      if (args.gallery.load)
+        self.markGalleryItemAsCurrent(self.currentSlide());
+
+      if(!paused)
+        TemporizedSlider.$scheduleNextChange();
+    };
+
+    self.$scheduleNextChange = function() {
+      TemporizedSlider.$clearTimer(timeOut);
+      TemporizedSlider.$setTimer(
+        'TemporizedSlider.$play()',
+        self.currentSlide.time * 1000
+      );
+    };
+
+    self.$clearTimer = function(timeOut, clearTimeoutFnc) {
+      if (!clearTimeoutFnc) clearTimeoutFnc = clearTimeout;
+
+      clearTimeoutFnc(timeOut);
+    };
+
+    self.$changeSlide = function(nextSlide) {
+      TemporizedSlider.$getElement(self.imageId).src = nextSlide.image;
+      TemporizedSlider.$getElement(self.titleId).innerHTML = nextSlide.title;
+      TemporizedSlider.$getElement(self.textId).innerHTML = nextSlide.text;
+
+      if (self.gallery.load)
+        self.$markGalleryItemAsCurrent(nextSlide);
+
+      if (self.afterChange)
+        self.afterChange();
+    };
+
+    self.$markGalleryItemAsCurrent = function(elem) {
+      var imgs = document.getElementsByClassName('gallery_img');
+      for(var i in imgs) {
+        if (typeof imgs[i] === 'object') {
+          imgs[i].className = imgs[i].className.replace(' current', '');
+        }
+      }
+      if (typeof elem === 'number')
+        elem = imgs[elem];
+      elem.className += ' current';
+    };
   };
 
   TemporizedSlider.Slide = function(obj, previousSlide) {

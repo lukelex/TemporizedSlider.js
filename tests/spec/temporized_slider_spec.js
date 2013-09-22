@@ -1,3 +1,21 @@
+var mockElm = undefined
+
+function selectorDouble () {
+  var selector = {
+    getElementById: function () {}
+  }
+
+  mockElm = {
+    onClick: undefined,
+    src: undefined,
+    innerHTML: undefined
+  }
+
+  spyOn(selector, 'getElementById').andReturn(mockElm);
+
+  return selector;
+}
+
 describe('TemporizedSlider', function () {
   var slides = [{
     image : 'https://www.google.com.br/images/srpr/logo3w.png',
@@ -5,24 +23,6 @@ describe('TemporizedSlider', function () {
     text  : 'temporized text',
     time  : 18
   }];
-
-  var mockElm = undefined
-
-  function selectorDouble () {
-    var selector = {
-      getElementById: function () {}
-    }
-
-    mockElm = {
-      onClick: undefined,
-      src: undefined,
-      innerHTML: undefined
-    }
-
-    spyOn(selector, 'getElementById').andReturn(mockElm);
-
-    return selector;
-  }
 
   var subject;
 
@@ -33,7 +33,7 @@ describe('TemporizedSlider', function () {
   describe('.setupAndStart', function () {
     beforeEach(function () {
       spyOn(subject, 'setup').andReturn(subject);
-      spyOn(subject, '$play');
+      spyOn(subject, 'play');
 
       subject.setupAndStart();
     });
@@ -43,47 +43,37 @@ describe('TemporizedSlider', function () {
     });
 
     it('should call play method', function () {
-      expect(subject.$play).toHaveBeenCalled();
+      expect(subject.play).toHaveBeenCalled();
     });
   });
 
   describe('.play', function () {
-    it('should forward to $play', function () {
-      spyOn(subject, '$play');
+    it('should forward to slider play', function () {
+      var slider = jasmine.createSpyObj('slider', ['play']);
 
-      subject.play();
+      subject.play(slider);
 
-      expect(subject.$play).toHaveBeenCalled();
-    });
-  });
-
-  describe('.pause', function () {
-    it('should forward to $pause', function () {
-      spyOn(subject, '$pause');
-
-      subject.pause();
-
-      expect(subject.$pause).toHaveBeenCalled();
+      expect(slider.play).toHaveBeenCalled();
     });
   });
 
   describe('.next', function () {
-    it('should forward to $next', function () {
-      spyOn(subject, '$next');
+    it('should forward to slider next', function () {
+      var slider = jasmine.createSpyObj('slider', ['next']);
 
-      subject.next();
+      subject.next(slider);
 
-      expect(subject.$next).toHaveBeenCalled();
+      expect(slider.next).toHaveBeenCalled();
     });
   });
 
   describe('.previous', function () {
-    it('should forward to $previous', function () {
-      spyOn(subject, '$previous');
+    it('should forward to slider previous', function () {
+      var slider = jasmine.createSpyObj('slider', ['previous']);
 
-      subject.previous();
+      subject.previous(slider);
 
-      expect(subject.$previous).toHaveBeenCalled();
+      expect(slider.previous).toHaveBeenCalled();
     });
   });
 
@@ -172,59 +162,6 @@ describe('TemporizedSlider', function () {
       result = subject.$mergeArgs(options, defaultOptions);
 
       expect(result).toEqual(expectedResult);
-    });
-  });
-
-  describe('.$clearTimer', function () {
-    it('should clear the timer countdown', function () {
-      clearFnc = jasmine.createSpy('clearTimeout');
-
-      subject.$clearTimer(timeOut, clearFnc);
-
-      expect(clearFnc).toHaveBeenCalledWith(timeOut);
-    });
-  });
-
-  describe('.$setNextSlide', function () {
-    beforeEach(function () {
-      slider = {
-        gallery: {load: true},
-        nextSlide: jasmine.createSpy('nextSlide')
-      };
-
-      obj = {
-        image: '',
-        title: '',
-        text: '',
-      }
-
-      slider.nextSlide.andReturn(obj);
-
-      selectorDouble();
-
-      spyOn(subject, '$getElement').andReturn(mockElm);
-      spyOn(subject, '$markGalleryItemAsCurrent');
-    });
-
-    it('should set the html properties from the obj', function () {
-      subject.$setNextSlide(slider);
-
-      expect(subject.$getElement.calls.length).toEqual(3);
-    });
-
-    it('should call the .$markGalleryItemAsCurrent', function() {
-      subject.$setNextSlide(slider);
-
-      expect(subject.$markGalleryItemAsCurrent).
-        toHaveBeenCalledWith(slider);
-    });
-
-    it('should trigger the afterChange callback', function () {
-      slider.afterChange = jasmine.createSpy('callback');
-
-      subject.$setNextSlide(slider);
-
-      expect(slider.afterChange).toHaveBeenCalled();
     });
   });
 
@@ -360,53 +297,55 @@ describe('TemporizedSlider', function () {
     });
   });
 
-  describe('.$play', function() {
+  describe('.$galleryItemClick', function() {
     beforeEach(function() {
-      spyOn(subject, '$setNextSlide');
-      spyOn(subject, '$scheduleNextChange');
-      spyOn(subject, '$markGalleryItemAsCurrent');
+      slider = jasmine.createSpyObj('slider',
+        ['$changeSlide', 'pause', '$markGalleryItemAsCurrent']
+      );
     });
 
-    it('should trigger the beforePlay callback', function() {
-      var slider = {
-        beforePlay: jasmine.createSpy('beforePlay'),
-        paused: true,
-        unpause: jasmine.createSpy('unpause'),
-      };
+    it('should call $changeSlide', function() {
+      subject.$galleryItemClick({}, slider);
 
-      subject.$play(slider);
-
-      expect(slider.beforePlay).toHaveBeenCalled();
+      expect(slider.$changeSlide).toHaveBeenCalled();
     });
 
-    it('should trigger the afterPlay callback', function() {
-      var slider = {
-        afterPlay: jasmine.createSpy('afterPlay'),
-        paused: true,
-        unpause: jasmine.createSpy('unpause'),
-      };
+    it('should call $markGalleryItemAsCurrent', function() {
+      mockParam = {};
 
-      subject.$play(slider);
+      subject.$galleryItemClick(mockParam, slider);
 
-      expect(slider.afterPlay).toHaveBeenCalled();
+      expect(slider.$markGalleryItemAsCurrent).
+        toHaveBeenCalledWith(mockParam);
+    });
+
+    it('should pause the slider', function() {
+      subject.$galleryItemClick({}, slider);
+
+      expect(slider.pause).toHaveBeenCalled();
     });
   });
+});
 
-  describe('.$pause', function () {
-    var slider;
+describe('Slider', function() {
+  var sampleConfig;
 
-    beforeEach(function() {
-      slider = {
-        pause: function() {}
-      }
-    });
+  beforeEach(function () {
+    script = TemporizedSlider;
+    sampleConfig = {
+      slides: [1,2]
+    };
+    subject = new TemporizedSlider.Slider(sampleConfig)
+  });
 
+  describe('.pause', function(){
     it('should trigger the beforePause callback', function() {
-      slider.beforePause = jasmine.createSpy('beforePause');
+      subject.beforePause = jasmine.createSpy('beforePause');
 
-      subject.$pause(slider);
+      subject.paused = false;
+      subject.pause();
 
-      expect(slider.beforePause).toHaveBeenCalled();
+      expect(subject.beforePause).toHaveBeenCalled();
     });
 
     it('should clear the timer', function() {
@@ -414,54 +353,113 @@ describe('TemporizedSlider', function () {
 
       timeOut = 50;
 
-      subject.$pause(slider);
+      subject.pause();
 
       expect(clearFnc).toHaveBeenCalledWith(timeOut);
     });
 
     it('should not execute if slider is already paused', function() {
-      clearFnc = spyOn(subject, '$clearTimer');
+      spyOn(subject, '$clearTimer');
 
-      slider.paused = true;
+      subject.pause();
+      subject.pause();
 
-      subject.$pause(slider);
-
-      expect(clearFnc).not.toHaveBeenCalled();
+      expect(clearFnc.calls.length).toEqual(1);
     });
-  });
-});
 
-describe('Slider', function() {
-  beforeEach(function () {
-    script = TemporizedSlider;
-    subject = TemporizedSlider.Slider;
+    it('should trigger the beforePlay callback', function() {
+      subject.beforePlay = jasmine.createSpy('beforePlay');
+
+      subject.paused = true;
+      subject.play();
+
+      expect(subject.beforePlay).toHaveBeenCalled();
+    });
+
+    it('should trigger the afterPlay callback', function() {
+      subject.afterPlay = jasmine.createSpy('afterPlay');
+
+      subject.paused = true;
+      subject.play();
+
+      expect(subject.afterPlay).toHaveBeenCalled();
+    });
+
+    it('should not execute the beforePause callback if paused', function() {
+      subject.beforePause = jasmine.createSpy('beforePause');
+
+      subject.paused = true;
+      subject.pause();
+
+      expect(subject.beforePause).not.toHaveBeenCalled();
+    });
   });
 
   describe('#nextSlide', function() {
     it('should return the first slide when none is the current', function() {
-      config = {
-        slides: [1,2]
-      }
+      expectedSlide = subject.slides[0];
 
-      slider = new script.Slider(config);
-
-      expectedSlide = slider.slides[0];
-
-      expect(slider.nextSlide()).toEqual(expectedSlide);
+      expect(subject.nextSlide()).toEqual(expectedSlide);
     });
 
     it('should set the first slide as active', function() {
-      config = {
-        slides: [1,2]
-      }
+      subject.nextSlide();
 
-      slider = new script.Slider(config);
+      expectedSlide = subject.slides[1];
 
-      slider.nextSlide();
+      expect(subject.nextSlide()).toEqual(expectedSlide);
+    });
+  });
 
-      expectedSlide = slider.slides[1];
+  describe('.$scheduleNextChange', function() {
 
-      expect(slider.nextSlide()).toEqual(expectedSlide);
+  });
+
+  describe('.$clearTimer', function () {
+    it('should clear the timer countdown', function () {
+      clearFnc = jasmine.createSpy('clearTimeout');
+
+      subject.$clearTimer(timeOut, clearFnc);
+
+      expect(clearFnc).toHaveBeenCalledWith(timeOut);
+    });
+  });
+
+  describe('#$changeSlide', function () {
+    beforeEach(function () {
+      subject.gallery = {load: true};
+
+      nextSlide = {
+        image: '',
+        title: '',
+        text: '',
+      };
+
+      selectorDouble();
+
+      spyOn(script, '$getElement').andReturn(mockElm);
+      spyOn(subject, '$markGalleryItemAsCurrent');
+    });
+
+    it('should set the html properties from the obj', function () {
+      subject.$changeSlide(nextSlide);
+
+      expect(script.$getElement.calls.length).toEqual(3);
+    });
+
+    it('should call the .$markGalleryItemAsCurrent', function() {
+      subject.$changeSlide(nextSlide);
+
+      expect(subject.$markGalleryItemAsCurrent).
+        toHaveBeenCalledWith(nextSlide);
+    });
+
+    it('should trigger the afterChange callback', function () {
+      subject.afterChange = jasmine.createSpy('callback');
+
+      subject.$changeSlide(nextSlide);
+
+      expect(subject.afterChange).toHaveBeenCalled();
     });
   });
 });
