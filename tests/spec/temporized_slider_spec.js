@@ -1,19 +1,15 @@
-var mockElm = undefined
+var DOM, subject, mockElm;
 
-function selectorDouble () {
-  var selector = {
-    getElementById: function () {}
-  }
-
+function DOMDouble () {
   mockElm = {
     onClick: undefined,
     src: undefined,
     innerHTML: undefined
   }
 
-  spyOn(selector, 'getElementById').andReturn(mockElm);
+  spyOn(TemporizedSlider.DOM, '$getElement').andReturn(mockElm);
 
-  return selector;
+  return TemporizedSlider.DOM;
 }
 
 describe('TemporizedSlider', function () {
@@ -24,10 +20,9 @@ describe('TemporizedSlider', function () {
     time  : 18
   }];
 
-  var subject;
-
   beforeEach(function () {
     subject = TemporizedSlider;
+    DOM = undefined;
   });
 
   describe('.setupAndStart', function () {
@@ -165,30 +160,16 @@ describe('TemporizedSlider', function () {
     });
   });
 
-  describe('.$getElement', function () {
-    it('should forward to getElementById', function() {
-      DOMHandler = selectorDouble();
-
-      elmId = 'some-id';
-
-      subject.$getElement(elmId, DOMHandler);
-
-      expect(DOMHandler.getElementById).toHaveBeenCalledWith(elmId);
-    });
-  });
-
   describe('.$applyEventFor', function () {
     it('should attach the event handler', function () {
-      selectorDouble();
-
-      spyOn(subject, '$getElement').andReturn(mockElm);
+      DOM = DOMDouble();
 
       control = {
         id: 'elmId',
         handler: function() {}
       }
 
-      result = subject.$applyEventFor(control);
+      result = subject.$applyEventFor(control, DOM);
 
       expect(result).not.toBeUndefined();
     });
@@ -327,6 +308,27 @@ describe('TemporizedSlider', function () {
   });
 });
 
+describe('DOM', function() {
+  beforeEach(function() {
+    subject = TemporizedSlider.DOM;
+  });
+
+  describe('#$getElement', function () {
+    it('should forward to getElementById', function() {
+      elmId = 'some-id';
+
+      var documentDouble = jasmine.createSpyObj(
+        'documentDouble', ['getElementById']
+      );
+
+      subject.$getElement(elmId, documentDouble);
+
+      expect(documentDouble.getElementById).
+        toHaveBeenCalledWith(elmId);
+    });
+  });
+});
+
 describe('Slider', function() {
   var sampleConfig;
 
@@ -335,7 +337,10 @@ describe('Slider', function() {
     sampleConfig = {
       slides: [1,2]
     };
-    subject = new TemporizedSlider.Slider(sampleConfig)
+    DOM = DOMDouble();
+    subject = new TemporizedSlider.Slider(
+      sampleConfig, DOM
+    );
   });
 
   describe('.pause', function(){
@@ -429,22 +434,19 @@ describe('Slider', function() {
     beforeEach(function () {
       subject.gallery = {load: true};
 
+      spyOn(subject, '$markGalleryItemAsCurrent');
+
       nextSlide = {
         image: '',
         title: '',
         text: '',
       };
-
-      selectorDouble();
-
-      spyOn(script, '$getElement').andReturn(mockElm);
-      spyOn(subject, '$markGalleryItemAsCurrent');
     });
 
     it('should set the html properties from the obj', function () {
       subject.$changeSlide(nextSlide);
 
-      expect(script.$getElement.calls.length).toEqual(3);
+      expect(DOM.$getElement.calls.length).toEqual(3);
     });
 
     it('should call the .$markGalleryItemAsCurrent', function() {

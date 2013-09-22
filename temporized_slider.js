@@ -43,7 +43,9 @@ var TemporizedSlider;
       );
 
       var slider = TemporizedSlider.$slider =
-        new TemporizedSlider.Slider(args);
+        new TemporizedSlider.Slider(
+          args, TemporizedSlider.DOM
+        );
 
       if (slider.controls.load)
         TemporizedSlider.$loadControls(slider);
@@ -72,13 +74,8 @@ var TemporizedSlider;
 
       return args;
     },
-    $getElement: function(id, DOMHandler) {
-      if (!DOMHandler) DOMHandler = document;
-
-      return DOMHandler.getElementById(id);
-    },
-    $applyEventFor: function (control) {
-      var htmlElm = TemporizedSlider.$getElement(control.id);
+    $applyEventFor: function (control, DOM) {
+      var htmlElm = DOM.$getElement(control.id);
       if (htmlElm) {
         htmlElm.onclick = control.handler;
         return htmlElm;
@@ -160,8 +157,18 @@ var TemporizedSlider;
     }
   };
 
-  TemporizedSlider.Slider = function(config) {
+  TemporizedSlider.DOM = {
+    $getElement: function(id, DOMHandler) {
+      if (!DOMHandler) DOMHandler = document;
+
+      return DOMHandler.getElementById(id);
+    }
+  };
+
+  TemporizedSlider.Slider = function(config, DOM) {
     var self = this;
+
+    self.DOM = DOM;
 
     self.controls = config.controls;
     self.defaultTime = config.defaultTime;
@@ -253,9 +260,9 @@ var TemporizedSlider;
     };
 
     self.$changeSlide = function(nextSlide) {
-      TemporizedSlider.$getElement(self.imageId).src = nextSlide.image;
-      TemporizedSlider.$getElement(self.titleId).innerHTML = nextSlide.title;
-      TemporizedSlider.$getElement(self.textId).innerHTML = nextSlide.text;
+      self.DOM.$getElement(self.imageId).src = nextSlide.image;
+      self.DOM.$getElement(self.titleId).innerHTML = nextSlide.title;
+      self.DOM.$getElement(self.textId).innerHTML = nextSlide.text;
 
       if (self.gallery.load)
         self.$markGalleryItemAsCurrent(nextSlide);
