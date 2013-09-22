@@ -51,7 +51,7 @@ var TemporizedSlider;
         TemporizedSlider.$loadControls(slider);
 
       if (slider.gallery.load)
-        TemporizedSlider.$loadGallery(slider);
+        TemporizedSlider.$loadGallery(slider, TemporizedSlider.DOM);
 
       timeOut = null;
 
@@ -75,7 +75,7 @@ var TemporizedSlider;
       return args;
     },
     $applyEventFor: function (control, DOM) {
-      var htmlElm = DOM.$getElement(control.id);
+      var htmlElm = DOM.$getElementById(control.id);
       if (htmlElm) {
         htmlElm.onclick = control.handler;
         return htmlElm;
@@ -84,21 +84,27 @@ var TemporizedSlider;
     $loadControls: function(slider) {
       if (!slider.controls.load) return slider;
 
-      TemporizedSlider.$applyEventFor(slider.controls.play);
+      TemporizedSlider.$applyEventFor(
+        slider.controls.play, TemporizedSlider.DOM
+      );
 
-      TemporizedSlider.$applyEventFor(slider.controls.pause);
+      TemporizedSlider.$applyEventFor(
+        slider.controls.pause, TemporizedSlider.DOM
+      );
 
-      TemporizedSlider.$applyEventFor(slider.controls.previous);
+      TemporizedSlider.$applyEventFor(
+        slider.controls.previous, TemporizedSlider.DOM
+      );
 
-      TemporizedSlider.$applyEventFor(slider.controls.next);
+      TemporizedSlider.$applyEventFor(
+        slider.controls.next, TemporizedSlider.DOM
+      );
 
       return slider;
     },
     $loadGallery: function(slider, DOMHandler) {
-      if (!DOMHandler) DOMHandler = document;
-
       var imgUrl, title, container, galleryImgItem;
-      var galleryElm = TemporizedSlider.$getElement(slider.gallery.id);
+      var galleryElm = DOMHandler.$getElementById(slider.gallery.id);
 
       var slides = slider.slides;
 
@@ -106,7 +112,7 @@ var TemporizedSlider;
         imgUrl = slides[i].image;
         imgTitle = slides[i].title;
         galleryElm.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '" onclick="TemporizedSlider.GalleryItemClick(this)"/></div>';
-        galleryImgs = DOMHandler.getElementsByClassName("gallery_img");
+        galleryImgs = DOMHandler.$getElementsByClassName('gallery_img');
         galleryImgItem = galleryImgs[galleryImgs.length-1];
       };
     },
@@ -158,10 +164,20 @@ var TemporizedSlider;
   };
 
   TemporizedSlider.DOM = {
-    $getElement: function(id, DOMHandler) {
+    $getElementById: function(id, DOMHandler) {
       if (!DOMHandler) DOMHandler = document;
 
       return DOMHandler.getElementById(id);
+    },
+    $getElementsByClassName: function(className, DOMHandler) {
+      if (!DOMHandler) DOMHandler = document;
+
+      return DOMHandler.getElementsByClassName(className);
+    },
+    $getElementsWithClass: function(className, DOMHandler) {
+      if (!DOMHandler) DOMHandler = document;
+
+      return DOMHandler.getElementsWithClass(className);
     }
   };
 
@@ -260,9 +276,9 @@ var TemporizedSlider;
     };
 
     self.$changeSlide = function(nextSlide) {
-      self.DOM.$getElement(self.imageId).src = nextSlide.image;
-      self.DOM.$getElement(self.titleId).innerHTML = nextSlide.title;
-      self.DOM.$getElement(self.textId).innerHTML = nextSlide.text;
+      self.DOM.$getElementById(self.imageId).src = nextSlide.image;
+      self.DOM.$getElementById(self.titleId).innerHTML = nextSlide.title;
+      self.DOM.$getElementById(self.textId).innerHTML = nextSlide.text;
 
       if (self.gallery.load)
         self.$markGalleryItemAsCurrent(nextSlide);

@@ -7,7 +7,7 @@ function DOMDouble () {
     innerHTML: undefined
   }
 
-  spyOn(TemporizedSlider.DOM, '$getElement').andReturn(mockElm);
+  spyOn(TemporizedSlider.DOM, '$getElementById').andReturn(mockElm);
 
   return TemporizedSlider.DOM;
 }
@@ -90,7 +90,7 @@ describe('TemporizedSlider', function () {
       expect(options.beforeSetup).toHaveBeenCalled();
     });
 
-    it('should call loadControls', function () {
+    it('should call $loadControls', function () {
       var options = {
         slides: slides,
         controls: {
@@ -239,6 +239,8 @@ describe('TemporizedSlider', function () {
           }
         }
       };
+
+      DOM = DOMDouble();
     });
 
     it('should call .$applyEventFor with play config', function () {
@@ -247,7 +249,7 @@ describe('TemporizedSlider', function () {
       subject.$loadControls(slider);
 
       expect(subject.$applyEventFor).
-        toHaveBeenCalledWith(slider.controls.play);
+        toHaveBeenCalledWith(slider.controls.play, DOM);
     });
 
     it('should call .$applyEventFor with pause config', function () {
@@ -256,7 +258,7 @@ describe('TemporizedSlider', function () {
       subject.$loadControls(slider);
 
       expect(subject.$applyEventFor).
-        toHaveBeenCalledWith(slider.controls.pause);
+        toHaveBeenCalledWith(slider.controls.pause, DOM);
     });
 
     it('should call .$applyEventFor with next config', function () {
@@ -265,7 +267,7 @@ describe('TemporizedSlider', function () {
       subject.$loadControls(slider);
 
       expect(subject.$applyEventFor).
-        toHaveBeenCalledWith(slider.controls.next);
+        toHaveBeenCalledWith(slider.controls.next, DOM);
     });
 
     it('should call .$applyEventFor with previous config', function () {
@@ -274,7 +276,7 @@ describe('TemporizedSlider', function () {
       subject.$loadControls(slider);
 
       expect(subject.$applyEventFor).
-        toHaveBeenCalledWith(slider.controls.previous);
+        toHaveBeenCalledWith(slider.controls.previous, DOM);
     });
   });
 
@@ -309,19 +311,32 @@ describe('TemporizedSlider', function () {
 });
 
 describe('DOM', function() {
+  var documentDouble;
+
   beforeEach(function() {
     subject = TemporizedSlider.DOM;
+
+    documentDouble = jasmine.createSpyObj(
+      'documentDouble', ['getElementById', 'getElementsWithClass']
+    );
   });
 
-  describe('#$getElement', function () {
+  describe('#$getElementById', function () {
     it('should forward to getElementById', function() {
       elmId = 'some-id';
 
-      var documentDouble = jasmine.createSpyObj(
-        'documentDouble', ['getElementById']
-      );
+      subject.$getElementById(elmId, documentDouble);
 
-      subject.$getElement(elmId, documentDouble);
+      expect(documentDouble.getElementById).
+        toHaveBeenCalledWith(elmId);
+    });
+  });
+
+  describe('#$getElementById', function () {
+    it('should forward to getElementById', function() {
+      elmClass = 'some-class';
+
+      subject.$getElementById(elmId, documentDouble);
 
       expect(documentDouble.getElementById).
         toHaveBeenCalledWith(elmId);
@@ -416,11 +431,11 @@ describe('Slider', function() {
     });
   });
 
-  describe('.$scheduleNextChange', function() {
+  describe('#$scheduleNextChange', function() {
 
   });
 
-  describe('.$clearTimer', function () {
+  describe('#$clearTimer', function () {
     it('should clear the timer countdown', function () {
       clearFnc = jasmine.createSpy('clearTimeout');
 
@@ -446,7 +461,7 @@ describe('Slider', function() {
     it('should set the html properties from the obj', function () {
       subject.$changeSlide(nextSlide);
 
-      expect(DOM.$getElement.calls.length).toEqual(3);
+      expect(DOM.$getElementById.calls.length).toEqual(3);
     });
 
     it('should call the .$markGalleryItemAsCurrent', function() {
