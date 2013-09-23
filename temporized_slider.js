@@ -216,7 +216,17 @@ var TemporizedSlider;
     };
 
     self.nextSlide = function() {
-      return self.current = self.currentSlide().$next;
+      return self.current = (
+        self.currentSlide().$next ||
+        self.slides[0]
+      );
+    };
+
+    self.previousSlide = function() {
+      return self.current = (
+        self.currentSlide().$previous ||
+        self.slides[self.slides.length-1]
+      );
     };
 
     self.play = function() {
@@ -226,6 +236,7 @@ var TemporizedSlider;
         self.paused = false;
 
         self.$changeSlide(self.currentSlide());
+        self.$scheduleNextChange();
 
         if (self.afterPlay) self.afterPlay();
       };
@@ -242,19 +253,19 @@ var TemporizedSlider;
     };
 
     self.$next = function() {
-      self.changeSlide(self.nextSlide());
+      self.$changeSlide(self.nextSlide());
 
-      if (args.gallery.load)
-        self.markGalleryItemAsCurrent(self.currentSlide());
+      if (self.gallery.load)
+        self.$markGalleryItemAsCurrent(self.currentSlide());
 
       if(!self.paused)
         self.$scheduleNextChange();
     };
 
     self.$previous = function() {
-      self.changeSlide(self.previousSlide());
+      self.$changeSlide(self.previousSlide());
 
-      if (args.gallery.load)
+      if (self.gallery.load)
         self.markGalleryItemAsCurrent(self.currentSlide());
 
       if(!paused)
@@ -262,10 +273,9 @@ var TemporizedSlider;
     };
 
     self.$scheduleNextChange = function() {
-      TemporizedSlider.$clearTimer(timeOut);
-      TemporizedSlider.$setTimer(
-        'TemporizedSlider.$play()',
-        self.currentSlide.time * 1000
+      setTimeout(
+        self.$next,
+        self.currentSlide().time * 1000
       );
     };
 

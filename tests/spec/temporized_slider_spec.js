@@ -371,7 +371,7 @@ describe('Slider', function() {
   beforeEach(function () {
     script = TemporizedSlider;
     sampleConfig = {
-      slides: [1,2]
+      slides: [1,2,3,4,5]
     };
     DOM = DOMDouble();
     subject = new TemporizedSlider.Slider(
@@ -379,11 +379,99 @@ describe('Slider', function() {
     );
   });
 
+  describe('#currentSlide', function() {
+    it('should return the first slide when none is the current', function() {
+      expectedSlide = subject.slides[0];
+
+      expect(subject.currentSlide()).toEqual(expectedSlide);
+    });
+  });
+
+  describe('#nextSlide', function() {
+    it('should call #currentSlide', function() {
+      spyOn(subject, 'currentSlide').andReturn({});
+
+      subject.nextSlide();
+
+      expect(subject.currentSlide).toHaveBeenCalled();
+    });
+
+    it('should return the $next property from the #currentSlide return', function() {
+      expectedSlide = subject.slides[0];
+
+      spyOn(subject, 'currentSlide').
+        andReturn({$next: expectedSlide});
+
+      expect(subject.nextSlide()).toEqual(expectedSlide);
+    });
+
+    it('should set the first slide as active', function() {
+      subject.nextSlide();
+
+      expectedSlide = subject.slides[1];
+
+      spyOn(subject, 'currentSlide').
+        andReturn({$next: expectedSlide});
+
+      expect(subject.nextSlide()).toEqual(expectedSlide);
+    });
+
+    it('should return the first slide if the last is the current', function() {
+      expectedSlide = subject.slides[0];
+
+      spyOn(subject, 'currentSlide').
+        andReturn(subject.slides[subject.slides.length-1]);
+
+      expect(subject.nextSlide()).toEqual(expectedSlide);
+    });
+  });
+
+  describe('previousSlide', function() {
+    it('should call #currentSlide', function() {
+      spyOn(subject, 'currentSlide').andReturn({});
+
+      subject.previousSlide();
+
+      expect(subject.currentSlide).toHaveBeenCalled();
+    })
+
+    it('should return the last slide if the first is the current', function() {
+      expectedSlide = subject.slides[subject.slides.length-1];
+
+      spyOn(subject, 'currentSlide').
+        andReturn(subject.slides[0]);
+
+      expect(subject.previousSlide()).toEqual(expectedSlide);
+    });
+  });
+
   describe('#play', function() {
+    beforeEach(function(){
+      spyOn(subject, 'currentSlide');
+      spyOn(subject, '$changeSlide');
+      spyOn(subject, '$scheduleNextChange');
+    });
+
+    it('should call #$changeSlide', function() {
+      var newSlide = {};
+
+      subject.currentSlide.andReturn(newSlide);
+
+      subject.play();
+
+      expect(subject.$changeSlide).
+        toHaveBeenCalledWith(newSlide);
+    });
+
+    it('should call #$scheduleNextChange', function() {
+      subject.play();
+
+      expect(subject.$scheduleNextChange).
+        toHaveBeenCalled();
+    });
+
     it('should trigger the beforePlay callback', function() {
       subject.beforePlay = jasmine.createSpy('beforePlay');
-
-      spyOn(subject, '$changeSlide');
 
       subject.paused = true;
       subject.play();
@@ -393,8 +481,6 @@ describe('Slider', function() {
 
     it('should trigger the afterPlay callback', function() {
       subject.afterPlay = jasmine.createSpy('afterPlay');
-
-      spyOn(subject, '$changeSlide');
 
       subject.paused = true;
       subject.play();
@@ -442,41 +528,37 @@ describe('Slider', function() {
     });
   });
 
-  describe('#currentSlide', function() {
-    it('should return the first slide when none is the current', function() {
-      expectedSlide = subject.slides[0];
-
-      expect(subject.currentSlide()).toEqual(expectedSlide);
-    });
-  });
-
-  describe('#nextSlide', function() {
-    it('should call #currentSlide', function() {
-      spyOn(subject, 'currentSlide').andReturn({});
-
-      subject.nextSlide();
-
-      expect(subject.currentSlide).toHaveBeenCalled();
+  describe('#$next', function() {
+    beforeEach(function() {
+      spyOn(subject, 'nextSlide');
+      spyOn(subject, '$changeSlide');
+      spyOn(subject, '$scheduleNextChange');
+      subject.gallery = {};
     });
 
-    it('should get the $next property from the returned value', function() {
-      expectedSlide = subject.slides[0];
+    it('should call #nextSlide', function() {
+      subject.$next();
 
-      spyOn(subject, 'currentSlide').
-        andReturn({$next: expectedSlide});
-
-      expect(subject.nextSlide()).toEqual(expectedSlide);
+      expect(subject.nextSlide).toHaveBeenCalled();
     });
 
-    it('should set the first slide as active', function() {
-      subject.nextSlide();
+    it('should call #$changeSlide', function() {
+      mockSlide = {}
 
-      expectedSlide = subject.slides[1];
+      subject.nextSlide.andReturn(mockSlide);
 
-      spyOn(subject, 'currentSlide').
-        andReturn({$next: expectedSlide});
+      subject.$next();
 
-      expect(subject.nextSlide()).toEqual(expectedSlide);
+      expect(subject.$changeSlide).
+        toHaveBeenCalledWith(mockSlide);
+    });
+
+    it('should call #$scheduleNextChange', function() {
+      subject.paused = false;
+
+      subject.$next();
+
+      expect(subject.$scheduleNextChange).toHaveBeenCalled();
     });
   });
 
