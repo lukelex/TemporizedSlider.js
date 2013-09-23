@@ -210,15 +210,23 @@ var TemporizedSlider;
     self.paused = true;
 
     self.currentSlide = function() {
-      if (self.current) return self.current;
-
-      return {
-        $next: self.slides[0]
-      }
+      return (self.current || self.slides[0]);
     };
 
     self.nextSlide = function() {
       return self.current = self.currentSlide().$next;
+    };
+
+    self.play = function() {
+      if (self.paused) {
+        if (self.beforePlay) self.beforePlay();
+
+        self.paused = false;
+
+        self.$changeSlide(self.currentSlide());
+
+        if (self.afterPlay) self.afterPlay();
+      };
     };
 
     self.pause = function() {
@@ -229,16 +237,6 @@ var TemporizedSlider;
       };
 
       self.$clearTimer(timeOut);
-    };
-
-    self.play = function() {
-      if (self.paused) {
-        if (self.beforePlay) self.beforePlay();
-
-        self.paused = false;
-
-        if (self.afterPlay) self.afterPlay();
-      };
     };
 
     self.$next = function() {
@@ -283,8 +281,7 @@ var TemporizedSlider;
       if (self.gallery.load)
         self.$markGalleryItemAsCurrent(nextSlide);
 
-      if (self.afterChange)
-        self.afterChange();
+      if (self.afterChange) self.afterChange();
     };
 
     self.$markGalleryItemAsCurrent = function(elem) {

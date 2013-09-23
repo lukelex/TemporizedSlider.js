@@ -374,9 +374,11 @@ describe('Slider', function() {
     );
   });
 
-  describe('.pause', function(){
+  describe('#pause', function(){
     it('should trigger the beforePause callback', function() {
       subject.beforePause = jasmine.createSpy('beforePause');
+
+      spyOn(subject, '$clearTimer');
 
       subject.paused = false;
       subject.pause();
@@ -395,30 +397,10 @@ describe('Slider', function() {
     });
 
     it('should not execute if slider is already paused', function() {
-      spyOn(subject, '$clearTimer');
-
       subject.pause();
       subject.pause();
 
       expect(clearFnc.calls.length).toEqual(1);
-    });
-
-    it('should trigger the beforePlay callback', function() {
-      subject.beforePlay = jasmine.createSpy('beforePlay');
-
-      subject.paused = true;
-      subject.play();
-
-      expect(subject.beforePlay).toHaveBeenCalled();
-    });
-
-    it('should trigger the afterPlay callback', function() {
-      subject.afterPlay = jasmine.createSpy('afterPlay');
-
-      subject.paused = true;
-      subject.play();
-
-      expect(subject.afterPlay).toHaveBeenCalled();
     });
 
     it('should not execute the beforePause callback if paused', function() {
@@ -431,9 +413,52 @@ describe('Slider', function() {
     });
   });
 
-  describe('#nextSlide', function() {
+  describe('#play', function() {
+    it('should trigger the beforePlay callback', function() {
+      subject.beforePlay = jasmine.createSpy('beforePlay');
+
+      spyOn(subject, '$changeSlide');
+
+      subject.paused = true;
+      subject.play();
+
+      expect(subject.beforePlay).toHaveBeenCalled();
+    });
+
+    it('should trigger the afterPlay callback', function() {
+      subject.afterPlay = jasmine.createSpy('afterPlay');
+
+      spyOn(subject, '$changeSlide');
+
+      subject.paused = true;
+      subject.play();
+
+      expect(subject.afterPlay).toHaveBeenCalled();
+    });
+  });
+
+  describe('#currentSlide', function() {
     it('should return the first slide when none is the current', function() {
       expectedSlide = subject.slides[0];
+
+      expect(subject.currentSlide()).toEqual(expectedSlide);
+    });
+  });
+
+  describe('#nextSlide', function() {
+    it('should get the $next ', function() {
+      spyOn(subject, 'currentSlide').andReturn({});
+
+      subject.nextSlide();
+
+      expect(subject.currentSlide).toHaveBeenCalled();
+    });
+
+    it('should get the $next ', function() {
+      expectedSlide = subject.slides[0];
+
+      spyOn(subject, 'currentSlide').
+        andReturn({$next: expectedSlide});
 
       expect(subject.nextSlide()).toEqual(expectedSlide);
     });
@@ -442,6 +467,9 @@ describe('Slider', function() {
       subject.nextSlide();
 
       expectedSlide = subject.slides[1];
+
+      spyOn(subject, 'currentSlide').
+        andReturn({$next: expectedSlide});
 
       expect(subject.nextSlide()).toEqual(expectedSlide);
     });
@@ -498,7 +526,7 @@ describe('Slider', function() {
 });
 
 describe('Slide', function() {
-  describe('#nextSlide', function() {
+  describe('#$next', function() {
     it('should be able to set the $next slide', function() {
       firstSlide = new TemporizedSlider.Slide({});
       secondSlide = new TemporizedSlider.Slide({}, firstSlide);
