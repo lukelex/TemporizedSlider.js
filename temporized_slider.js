@@ -111,7 +111,7 @@ var TemporizedSlider;
       for(var i in slides) {
         imgUrl = slides[i].image;
         imgTitle = slides[i].title;
-        galleryElm.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '" onclick="TemporizedSlider.GalleryItemClick(this)"/></div>';
+        galleryElm.innerHTML += '<div class="gallery_item"><img class="gallery_img" src="' + imgUrl + '" alt="' + imgTitle + '" data-index="' + i + '" onclick="TemporizedSlider.$galleryItemClick(this)"/></div>';
         galleryImgs = DOMHandler.$getElementsByClassName('gallery_img');
         galleryImgItem = galleryImgs[galleryImgs.length-1];
       };
@@ -119,7 +119,9 @@ var TemporizedSlider;
     $galleryItemClick: function(e, slider) {
       if (!slider) slider = TemporizedSlider.$slider;
 
-      slider.$changeSlide();
+      slide = slider.slides[e.getAttribute('data-index')];
+
+      slider.$changeSlide(slide);
       slider.$markGalleryItemAsCurrent(e);
 
       slider.pause();

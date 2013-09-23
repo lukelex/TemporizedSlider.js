@@ -281,29 +281,34 @@ describe('TemporizedSlider', function () {
   });
 
   describe('.$galleryItemClick', function() {
+    var HTMLElm;
+
     beforeEach(function() {
       slider = jasmine.createSpyObj('slider',
         ['$changeSlide', 'pause', '$markGalleryItemAsCurrent']
       );
+
+      slider.slides = [1,2,3];
+
+      HTMLElm = jasmine.createSpyObj('HTMLElm', ['getAttribute']);
+      HTMLElm.getAttribute.andReturn(0);
     });
 
     it('should call $changeSlide', function() {
-      subject.$galleryItemClick({}, slider);
+      subject.$galleryItemClick(HTMLElm, slider);
 
       expect(slider.$changeSlide).toHaveBeenCalled();
     });
 
     it('should call $markGalleryItemAsCurrent', function() {
-      mockParam = {};
-
-      subject.$galleryItemClick(mockParam, slider);
+      subject.$galleryItemClick(HTMLElm, slider);
 
       expect(slider.$markGalleryItemAsCurrent).
-        toHaveBeenCalledWith(mockParam);
+        toHaveBeenCalledWith(HTMLElm);
     });
 
     it('should pause the slider', function() {
-      subject.$galleryItemClick({}, slider);
+      subject.$galleryItemClick(HTMLElm, slider);
 
       expect(slider.pause).toHaveBeenCalled();
     });
@@ -374,6 +379,30 @@ describe('Slider', function() {
     );
   });
 
+  describe('#play', function() {
+    it('should trigger the beforePlay callback', function() {
+      subject.beforePlay = jasmine.createSpy('beforePlay');
+
+      spyOn(subject, '$changeSlide');
+
+      subject.paused = true;
+      subject.play();
+
+      expect(subject.beforePlay).toHaveBeenCalled();
+    });
+
+    it('should trigger the afterPlay callback', function() {
+      subject.afterPlay = jasmine.createSpy('afterPlay');
+
+      spyOn(subject, '$changeSlide');
+
+      subject.paused = true;
+      subject.play();
+
+      expect(subject.afterPlay).toHaveBeenCalled();
+    });
+  });
+
   describe('#pause', function(){
     it('should trigger the beforePause callback', function() {
       subject.beforePause = jasmine.createSpy('beforePause');
@@ -413,30 +442,6 @@ describe('Slider', function() {
     });
   });
 
-  describe('#play', function() {
-    it('should trigger the beforePlay callback', function() {
-      subject.beforePlay = jasmine.createSpy('beforePlay');
-
-      spyOn(subject, '$changeSlide');
-
-      subject.paused = true;
-      subject.play();
-
-      expect(subject.beforePlay).toHaveBeenCalled();
-    });
-
-    it('should trigger the afterPlay callback', function() {
-      subject.afterPlay = jasmine.createSpy('afterPlay');
-
-      spyOn(subject, '$changeSlide');
-
-      subject.paused = true;
-      subject.play();
-
-      expect(subject.afterPlay).toHaveBeenCalled();
-    });
-  });
-
   describe('#currentSlide', function() {
     it('should return the first slide when none is the current', function() {
       expectedSlide = subject.slides[0];
@@ -446,7 +451,7 @@ describe('Slider', function() {
   });
 
   describe('#nextSlide', function() {
-    it('should get the $next ', function() {
+    it('should call #currentSlide', function() {
       spyOn(subject, 'currentSlide').andReturn({});
 
       subject.nextSlide();
@@ -454,7 +459,7 @@ describe('Slider', function() {
       expect(subject.currentSlide).toHaveBeenCalled();
     });
 
-    it('should get the $next ', function() {
+    it('should get the $next property from the returned value', function() {
       expectedSlide = subject.slides[0];
 
       spyOn(subject, 'currentSlide').
